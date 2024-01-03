@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "kaachan",
+    "slug": "kaachan",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
