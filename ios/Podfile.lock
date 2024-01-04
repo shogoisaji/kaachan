@@ -447,6 +447,12 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
+  - rive-react-native (6.2.3):
+    - React-Core
+    - RiveRuntime (= 5.5.1)
+  - RiveRuntime (5.5.1)
+  - RNCPicker (2.6.1):
+    - React-Core
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
 
@@ -499,12 +505,15 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - rive-react-native (from `../node_modules/rive-react-native`)
+  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - fmt
     - libevent
+    - RiveRuntime
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -601,6 +610,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  rive-react-native:
+    :path: "../node_modules/rive-react-native"
+  RNCPicker:
+    :path: "../node_modules/@react-native-picker/picker"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -653,9 +666,12 @@ SPEC CHECKSUMS:
   React-runtimescheduler: f23e337008403341177fc52ee4ca94e442c17ede
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
+  rive-react-native: 79777686cb29eaba6a28a0534fe82c8b8da41b4a
+  RiveRuntime: b57830ff73f406f3b4022f457b16690535ca4d05
+  RNCPicker: b18aaf30df596e9b1738e7c1f9ee55402a229dca
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
 
-PODFILE CHECKSUM: d78e749c23350559ddf691c12340384c8cefa4ef
+PODFILE CHECKSUM: 78f25c0fb38fb76d42cb9c341eeac0f7f272ffad
 
 COCOAPODS: 1.14.2
