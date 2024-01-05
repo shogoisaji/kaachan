@@ -1,15 +1,21 @@
-import React from 'react'
-import { Text, View, Button } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Button, StyleProp, ViewStyle } from 'react-native'
 import Rive, { Fit } from 'rive-react-native'
-// import { FAB } from 'react-native-paper'
 import { InputDialog } from './components/inputDialog'
 import { MainList } from './components/mainList'
+import { createTable } from './services/DatabaseService'
 
-export default function App() {
-    const [animationName, setAnimationName] = React.useState('normal')
-    const handleRiveState = (animation) => {
+const App: React.FC = () => {
+    const [animationName, setAnimationName] = useState<string>('normal')
+    const handleRiveState = (animation: string) => {
         setAnimationName(animation)
     }
+
+    useEffect(() => {
+        createTable()
+    }, [])
+
+    const riveStyle: StyleProp<ViewStyle> = { width: 100, height: 100 }
 
     return (
         <View className="h-full bg-custom-lightblue">
@@ -23,7 +29,7 @@ export default function App() {
                     animationName={animationName}
                     autoplay={true}
                     fit={Fit.Contain}
-                    style={{ width: 100, height: 100 }}
+                    style={riveStyle}
                 />
             </View>
             <View className="flex flex-row">
@@ -54,3 +60,5 @@ export default function App() {
         </View>
     )
 }
+
+export default App
