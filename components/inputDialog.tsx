@@ -1,13 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Dialog from 'react-native-dialog'
 import { View } from 'react-native'
-import { Icon, Button } from '@rneui/themed'
+import { Icon, Button, Input } from '@rneui/themed'
 import { Picker } from '@react-native-picker/picker'
+import { insertData } from '../services/DatabaseService'
+import { TextInput } from 'react-native-paper'
+import { UpdateContext } from '../contexts/updateContext'
 
 export const InputDialog = () => {
+    const tags = ['cat', 'dove', 'horse', 'dog', 'otter']
+    const { update, setUpdate } = useContext(UpdateContext)
     const [visible, setVisible] = useState(false)
+    const [textIsNull, setTextIsNull] = useState(false)
     const [text, setText] = useState('')
-    const [number, setNumber] = useState('0.5')
+    const [number, setNumber] = useState('1.5')
+    const [tag, setTag] = useState(tags[0])
     const numbers = [
         '0.5',
         '1.0',
@@ -28,6 +35,10 @@ export const InputDialog = () => {
     ]
 
     const showDialog = () => {
+        setTextIsNull(false)
+        setTag(tags[0])
+        setNumber('1.5')
+        setText('')
         setVisible(true)
     }
 
@@ -36,7 +47,12 @@ export const InputDialog = () => {
     }
 
     const handleConfirm = () => {
-        // 確認ボタンを押したときの処理
+        if (text == '') {
+            setTextIsNull(true)
+            return
+        }
+        setUpdate(!update)
+        insertData(text, Number(number), tag, new Date().toISOString())
         setVisible(false)
     }
 
@@ -67,23 +83,48 @@ export const InputDialog = () => {
                 <Dialog.Description>
                     学習した内容と時間を入力してください
                 </Dialog.Description>
-                <Dialog.Input
+                <Input
+                    style={{
+                        borderWidth: 1,
+                        borderColor: textIsNull ? 'red' : 'lightgray',
+                        borderRadius: 10,
+                        padding: 10,
+                    }}
+                    inputContainerStyle={{ borderBottomWidth: 0 }}
                     placeholder='例) "英語の勉強"'
                     onChangeText={(value) => setText(value)}
                 />
-                <Picker
-                    style={{ height: 200, marginTop: -30 }}
-                    selectedValue={number}
-                    onValueChange={(itemValue) => setNumber(itemValue)}
-                >
-                    {numbers.map((value) => (
-                        <Picker.Item
-                            key={value}
-                            label={value + ' h'}
-                            value={value}
-                        />
-                    ))}
-                </Picker>
+                <View className="flex flex-row justify-evenly">
+                    <View className="flex flex-col h-auto mb-4 items-center justify-between">
+                        {tags.map((iconName, index) => (
+                            <Icon
+                                key={index}
+                                name={iconName}
+                                type="font-awesome-5"
+                                color={
+                                    tag == iconName ? '#067CFF' : 'lightgray'
+                                }
+                                size={24}
+                                onPress={() => setTag(iconName)}
+                            />
+                        ))}
+                    </View>
+                    <View className="items-center justify-center">
+                        <Picker
+                            style={{ height: 200, width: 150, marginTop: -30 }}
+                            selectedValue={number}
+                            onValueChange={(itemValue) => setNumber(itemValue)}
+                        >
+                            {numbers.map((value) => (
+                                <Picker.Item
+                                    key={value}
+                                    label={value + ' h'}
+                                    value={value}
+                                />
+                            ))}
+                        </Picker>
+                    </View>
+                </View>
                 <Dialog.Button
                     label="Cancel"
                     onPress={handleCancel}
