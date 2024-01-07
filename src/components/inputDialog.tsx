@@ -9,7 +9,11 @@ import { UpdateContext } from '../contexts/updateContext'
 
 export const InputDialog = () => {
     const tags = ['cat', 'dove', 'horse', 'dog', 'otter']
-    const { update, setUpdate } = useContext(UpdateContext)
+    const context = useContext(UpdateContext)
+    if (!context) {
+        throw new Error('UpdateContext is not provided')
+    }
+    const { update, setUpdate } = context
     const [visible, setVisible] = useState(false)
     const [textIsNull, setTextIsNull] = useState(false)
     const [text, setText] = useState('')

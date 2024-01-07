@@ -3,7 +3,7 @@ import { MainList } from '../components/mainList'
 
 export const HistoryPage = () => {
     return (
-        <View>
+        <View className="flex-1 bg-custom-lightblue">
             <MainList />
         </View>
     )

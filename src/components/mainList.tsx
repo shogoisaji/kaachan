@@ -7,13 +7,17 @@ import {
     Text,
     TouchableOpacity,
 } from 'react-native'
-import saveData from '../dammy.json'
+import saveData from '../../dammy.json'
 import { Icon } from '@rneui/themed'
 import { fetchData, deleteData } from '../services/DatabaseService'
 import { UpdateContext } from '../contexts/updateContext'
 
 export const MainList = () => {
-    const { update, setUpdate } = useContext(UpdateContext)
+    const context = useContext(UpdateContext)
+    if (!context) {
+        throw new Error('UpdateContext is not provided')
+    }
+    const { update, setUpdate } = context
     const [fetchAllData, setFetchAllData] = useState([])
     useEffect(() => {
         const fetchDataAsync = async () => {
@@ -25,7 +29,7 @@ export const MainList = () => {
 
         console.log('fetchData:')
     }, [update])
-    const items = fetchAllData.map((item) => {
+    const items = fetchAllData.map((item: saveDataTypes) => {
         return (
             <TouchableOpacity
                 onLongPress={() => {

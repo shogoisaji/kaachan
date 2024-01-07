@@ -1,7 +1,11 @@
-import { useState } from 'react'
+import React, { useState, ReactNode } from 'react'
 import { UpdateContext } from '../contexts/updateContext'
 
-const UpdateProvider = ({ children }) => {
+interface Props {
+    children: ReactNode
+}
+
+const UpdateProvider = ({ children }: Props) => {
     const [update, setUpdate] = useState(false)
 
     return (
