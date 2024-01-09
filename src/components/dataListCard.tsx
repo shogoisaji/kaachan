@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 
-export const DataListCard = (saveData: saveDataTypes) => {
+export const DataListCard = (saveData: SaveDataTypes) => {
     return (
         <View>
             <Text>{saveData.title}</Text>

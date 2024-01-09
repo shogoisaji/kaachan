@@ -1,4 +1,4 @@
-type saveDataTypes = {
+type SaveDataTypes = {
     id: number
     title: string
     tag: string

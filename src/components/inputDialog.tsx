@@ -6,9 +6,9 @@ import { Picker } from '@react-native-picker/picker'
 import { insertData } from '../services/DatabaseService'
 import { TextInput } from 'react-native-paper'
 import { UpdateContext } from '../contexts/updateContext'
+import { tags, timeNumbers } from '../config/config'
 
 export const InputDialog = () => {
-    const tags = ['cat', 'dove', 'horse', 'dog', 'otter']
     const context = useContext(UpdateContext)
     if (!context) {
         throw new Error('UpdateContext is not provided')
@@ -17,31 +17,13 @@ export const InputDialog = () => {
     const [visible, setVisible] = useState(false)
     const [textIsNull, setTextIsNull] = useState(false)
     const [text, setText] = useState('')
-    const [number, setNumber] = useState('1.5')
-    const [tag, setTag] = useState(tags[0])
-    const numbers = [
-        '0.5',
-        '1.0',
-        '1.5',
-        '2.0',
-        '2.5',
-        '3.0',
-        '3.5',
-        '4.0',
-        '4.5',
-        '5.0',
-        '5.5',
-        '6.0',
-        '6.5',
-        '7.0',
-        '7.5',
-        '8.0',
-    ]
+    const [timeNumber, setTimeNumber] = useState('1.5')
+    const [selectedTag, setSelectedTag] = useState(tags[0])
 
     const showDialog = () => {
         setTextIsNull(false)
-        setTag(tags[0])
-        setNumber('1.5')
+        setSelectedTag(tags[0])
+        setTimeNumber('1.5')
         setText('')
         setVisible(true)
     }
@@ -56,7 +38,12 @@ export const InputDialog = () => {
             return
         }
         setUpdate(!update)
-        insertData(text, Number(number), tag, new Date().toISOString())
+        insertData(
+            text,
+            Number(timeNumber),
+            selectedTag,
+            new Date().toISOString()
+        )
         setVisible(false)
     }
 
@@ -66,16 +53,21 @@ export const InputDialog = () => {
                 radius={'xl'}
                 type="solid"
                 buttonStyle={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: 30,
                     paddingVertical: 8,
                     paddingHorizontal: 16,
                     backgroundColor: '#FF6A8C',
                 }}
-                titleStyle={{ fontSize: 24 }}
-                iconRight={true}
                 onPress={showDialog}
             >
-                Add
-                <Icon name="add" color="white" />
+                <Icon
+                    name="plus"
+                    color="white"
+                    size={28}
+                    type="font-awesome-5"
+                />
             </Button>
 
             <Dialog.Container visible={visible}>
@@ -106,20 +98,24 @@ export const InputDialog = () => {
                                 name={iconName}
                                 type="font-awesome-5"
                                 color={
-                                    tag == iconName ? '#067CFF' : 'lightgray'
+                                    selectedTag == iconName
+                                        ? '#067CFF'
+                                        : 'lightgray'
                                 }
                                 size={24}
-                                onPress={() => setTag(iconName)}
+                                onPress={() => setSelectedTag(iconName)}
                             />
                         ))}
                     </View>
                     <View className="items-center justify-center">
                         <Picker
                             style={{ height: 200, width: 150, marginTop: -30 }}
-                            selectedValue={number}
-                            onValueChange={(itemValue) => setNumber(itemValue)}
+                            selectedValue={timeNumber}
+                            onValueChange={(itemValue) =>
+                                setTimeNumber(itemValue)
+                            }
                         >
-                            {numbers.map((value) => (
+                            {timeNumbers.map((value) => (
                                 <Picker.Item
                                     key={value}
                                     label={value + ' h'}

@@ -1,54 +1,43 @@
-import { Text } from 'react-native'
-import { HomePage } from '../pages/homePage'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { NavigationContainer } from '@react-navigation/native'
-import { HistoryPage } from '../pages/historyPage'
+// import { View } from 'react-native'
+// import { Icon, Button, Input } from '@rneui/themed'
+// import {
+//     NativeStackNavigationProp,
+//     NativeStackScreenProps,
+// } from '@react-navigation/native-stack'
+// import { useNavigation } from '@react-navigation/native'
+// import { RootRoutesParamList } from '../routes/route'
 
-const Tab = createMaterialBottomTabNavigator()
+// // type Props<T extends keyof RootRoutesParamList> = NativeStackScreenProps<
+// //     RootRoutesParamList,
+// //     T
+// // >
 
-const SettingPage = () => <Text>お気に入り</Text>
-
-export const BottomNav = () => {
-    return (
-        <NavigationContainer>
-            <Tab.Navigator
-                initialRouteName="Main"
-                activeColor="#00499A"
-                inactiveColor="#F5F2E7"
-                barStyle={{ backgroundColor: '#00499A' }}
-            >
-                <Tab.Screen
-                    name="Home"
-                    component={HomePage}
-                    options={{
-                        tabBarLabel: '',
-                        tabBarIcon: ({ color }) => (
-                            <Icon name="home" color={color} size={28} />
-                        ),
-                    }}
-                />
-                <Tab.Screen
-                    name="History"
-                    component={HistoryPage}
-                    options={{
-                        tabBarLabel: '',
-                        tabBarIcon: ({ color }) => (
-                            <Icon name="list" color={color} size={28} />
-                        ),
-                    }}
-                />
-                <Tab.Screen
-                    name="Setting"
-                    component={SettingPage}
-                    options={{
-                        tabBarLabel: '',
-                        tabBarIcon: ({ color }) => (
-                            <Icon name="gear" color={color} size={28} />
-                        ),
-                    }}
-                />
-            </Tab.Navigator>
-        </NavigationContainer>
-    )
-}
+// export const BottomNav: React.FC = () => {
+//     const navigation =
+//         useNavigation<NativeStackNavigationProp<RootRoutesParamList>>()
+//     return (
+//         <View className="flex-row justify-evenly bg-custom-darkblue h-20 p-4">
+//             <Icon
+//                 name="home"
+//                 color="white"
+//                 size={32}
+//                 type="font-awesome-5"
+//                 onPress={() => navigation.navigate('Home')}
+//             />
+//             <Icon
+//                 name="list"
+//                 color="white"
+//                 size={32}
+//                 type="font-awesome-5"
+//                 onPress={() => navigation.navigate('History')}
+//             />
+//             <Icon
+//                 name="gear"
+//                 color="white"
+//                 size={32}
+//                 type="font-awesome"
+//                 onPress={() => navigation.navigate('Setting')}
+//             />
+//         </View>
+//     )
+// }

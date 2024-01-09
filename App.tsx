@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { createTable } from './src/services/DatabaseService'
 import UpdateProvider from './src/components/updateProvider'
-import { BottomNav } from './src/components/bottomNavigation'
+import { RootRoutes } from './src/routes/route'
 
 const App: React.FC = () => {
     useEffect(() => {
@@ -10,7 +10,7 @@ const App: React.FC = () => {
 
     return (
         <UpdateProvider>
-            <BottomNav />
+            <RootRoutes />
         </UpdateProvider>
     )
 }

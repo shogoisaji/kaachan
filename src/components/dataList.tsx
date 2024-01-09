@@ -1,18 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {
-    View,
-    SafeAreaView,
-    Button,
-    FlatList,
-    Text,
-    TouchableOpacity,
-} from 'react-native'
-import saveData from '../../dammy.json'
+import { View, FlatList, Text, TouchableOpacity } from 'react-native'
 import { Icon } from '@rneui/themed'
-import { fetchData, deleteData } from '../services/DatabaseService'
+import { fetchData } from '../services/DatabaseService'
 import { UpdateContext } from '../contexts/updateContext'
+import type {
+    NativeStackNavigationProp,
+    NativeStackScreenProps,
+} from '@react-navigation/native-stack'
+import { RootStackParamList } from '../routes/route'
 
-export const MainList = () => {
+type Props = {
+    navigation: NativeStackNavigationProp<RootStackParamList, 'DataList'>
+}
+
+export const DataList: React.FC<Props> = ({ navigation }) => {
     const context = useContext(UpdateContext)
     if (!context) {
         throw new Error('UpdateContext is not provided')
@@ -24,20 +25,20 @@ export const MainList = () => {
             const data = await fetchData()
             setFetchAllData(data)
         }
-
         fetchDataAsync()
-
-        console.log('fetchData:')
     }, [update])
-    const items = fetchAllData.map((item: saveDataTypes) => {
+    const items = fetchAllData.map((item: SaveDataTypes, index: number) => {
         return (
             <TouchableOpacity
-                onLongPress={() => {
-                    deleteData(item.id)
-                    setUpdate(!update)
-                }}
+                onPress={() =>
+                    navigation.navigate('Detail', { saveData: item })
+                }
             >
-                <View className="flex flex-row w-auto h-20 justify-between items-center rounded-2xl px-4 my-1 mx-2 bg-custom-blue">
+                <View
+                    className={`flex flex-row w-auto h-20 justify-between items-center rounded-2xl px-4 my-1 mx-2 bg-custom-blue ${
+                        index == 0 ? 'mt-4' : 'mt-1'
+                    }`}
+                >
                     <View className="flex flex-row items-center justify-start">
                         <View className="pr-5 pl-2">
                             <Icon
@@ -67,16 +68,21 @@ export const MainList = () => {
                             </Text>
                         </View>
                     </View>
-                    <Text className="text-xl w-16">
+                    <Text className="text-2xl w-16">
                         {item.time.toFixed(1)} h
                     </Text>
                 </View>
+                <View
+                    className={`
+                    ${index == fetchAllData.length - 1 ? 'h-24' : 'h-0'}
+                    `}
+                ></View>
             </TouchableOpacity>
         )
     })
     return (
-        <SafeAreaView>
+        <View className="h-auto">
             <FlatList data={items} renderItem={({ item }) => item} />
-        </SafeAreaView>
+        </View>
     )
 }

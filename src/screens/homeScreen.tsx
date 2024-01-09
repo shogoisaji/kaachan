@@ -1,23 +1,20 @@
 import { View } from 'react-native'
 import { InputDialog } from '../components/inputDialog'
-import { MainList } from '../components/mainList'
 import { Mom } from '../components/mom'
-import { useWindowDimensions } from 'react-native'
+import { VerticalChart } from '../components/verticalChart'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-export const HomePage = () => {
-    const windowHeight = useWindowDimensions().height
-
+export const HomeScreen: React.FC = () => {
     const animationState: string = 'happy1'
     return (
-        <View className="flex-1 bg-custom-lightblue">
+        <SafeAreaView className="flex-1 bg-custom-lightblue">
             <Mom animationState={animationState} />
-            <View style={{ marginTop: windowHeight / 2 }}>
-                <MainList />
+            <View className="flex flex-row mt-28 justify-center">
+                <VerticalChart />
             </View>
-
             <View className="absolute bottom-4 right-4">
                 <InputDialog />
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
