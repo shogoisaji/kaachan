@@ -13,28 +13,25 @@ import {
 } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../routes/route'
 import { useContext, useEffect, useState } from 'react'
-import { UpdateContext } from '../contexts/updateContext'
-import { fetchData } from '../services/DatabaseService'
+import { fetchAllData } from '../services/DatabaseService'
 import { Icon } from '@rneui/themed'
+import { AllRowStore, updateAllRowStore } from '../../state/dbStore'
 
-type Props = NativeStackScreenProps<RootStackParamList, 'History'>
+type Props = NativeStackScreenProps<RootStackParamList, 'HistoryScreen'>
 
 export const HistoryScreen: React.FC<Props> = ({ navigation }) => {
+    const { allRow, setAllRow } = AllRowStore()
     const windowHeight = useWindowDimensions().height
-    const context = useContext(UpdateContext)
-    if (!context) {
-        throw new Error('UpdateContext is not provided')
-    }
-    const { update, setUpdate } = context
-    const [fetchAllData, setFetchAllData] = useState([])
+    const [dataList, setDataList] = useState([])
+    // const fetchDataAsync = async () => {
+    //     const data = await fetchAllData()
+    //     setDataList(data)
+    // }
     useEffect(() => {
-        const fetchDataAsync = async () => {
-            const data = await fetchData()
-            setFetchAllData(data)
-        }
-        fetchDataAsync()
-    }, [update])
-    const items = fetchAllData.map((item: SaveDataTypes, index: number) => {
+        updateAllRowStore()
+        // fetchDataAsync()
+    }, [])
+    const items = allRow.map((item: SaveDataTypes, index: number) => {
         return (
             <TouchableOpacity
                 onPress={() =>
@@ -81,7 +78,7 @@ export const HistoryScreen: React.FC<Props> = ({ navigation }) => {
                 </View>
                 <View
                     className={`
-                    ${index == fetchAllData.length - 1 ? 'h-24' : 'h-0'}
+                    ${index == dataList.length - 1 ? 'h-24' : 'h-0'}
                     `}
                 ></View>
             </TouchableOpacity>

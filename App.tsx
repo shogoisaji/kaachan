@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { createTable } from './src/services/DatabaseService'
-import UpdateProvider from './src/components/updateProvider'
 import { RootRoutes } from './src/routes/route'
 
 const App: React.FC = () => {
@@ -8,11 +7,7 @@ const App: React.FC = () => {
         createTable()
     }, [])
 
-    return (
-        <UpdateProvider>
-            <RootRoutes />
-        </UpdateProvider>
-    )
+    return <RootRoutes />
 }
 
 export default App

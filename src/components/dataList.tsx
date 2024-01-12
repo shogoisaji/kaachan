@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { View, FlatList, Text, TouchableOpacity } from 'react-native'
 import { Icon } from '@rneui/themed'
-import { fetchData } from '../services/DatabaseService'
-import { UpdateContext } from '../contexts/updateContext'
+import { fetchAllData } from '../services/DatabaseService'
 import type {
     NativeStackNavigationProp,
     NativeStackScreenProps,
@@ -14,20 +13,15 @@ type Props = {
 }
 
 export const DataList: React.FC<Props> = ({ navigation }) => {
-    const context = useContext(UpdateContext)
-    if (!context) {
-        throw new Error('UpdateContext is not provided')
-    }
-    const { update, setUpdate } = context
-    const [fetchAllData, setFetchAllData] = useState([])
+    const [dataList, setDataList] = useState([])
     useEffect(() => {
         const fetchDataAsync = async () => {
-            const data = await fetchData()
-            setFetchAllData(data)
+            const data = await fetchAllData()
+            setDataList(data)
         }
         fetchDataAsync()
-    }, [update])
-    const items = fetchAllData.map((item: SaveDataTypes, index: number) => {
+    }, [])
+    const items = dataList.map((item: SaveDataTypes, index: number) => {
         return (
             <TouchableOpacity
                 onPress={() =>

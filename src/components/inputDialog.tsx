@@ -1,19 +1,23 @@
 import React, { useContext, useState } from 'react'
 import Dialog from 'react-native-dialog'
-import { View } from 'react-native'
-import { Icon, Button, Input } from '@rneui/themed'
+import { TouchableOpacity, View } from 'react-native'
+import { Icon, Input } from '@rneui/themed'
 import { Picker } from '@react-native-picker/picker'
 import { insertData } from '../services/DatabaseService'
-import { TextInput } from 'react-native-paper'
-import { UpdateContext } from '../contexts/updateContext'
 import { tags, timeNumbers } from '../config/config'
+import { FontAwesome } from '@expo/vector-icons'
+import { Button, Snackbar } from 'react-native-paper'
+import { useStore } from 'zustand'
+import { useInsertStore } from '../../state/insertState'
+import {
+    updateDbTotalsStore,
+    updateWeekDataStore,
+    useDbTotalsStore,
+} from '../../state/dbStore'
+import { useSelectedDateStore } from '../../state/appState'
 
 export const InputDialog = () => {
-    const context = useContext(UpdateContext)
-    if (!context) {
-        throw new Error('UpdateContext is not provided')
-    }
-    const { update, setUpdate } = context
+    const { selectedDate, setSelectedDate } = useSelectedDateStore()
     const [visible, setVisible] = useState(false)
     const [textIsNull, setTextIsNull] = useState(false)
     const [text, setText] = useState('')
@@ -32,44 +36,29 @@ export const InputDialog = () => {
         setVisible(false)
     }
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         if (text == '') {
             setTextIsNull(true)
             return
         }
-        setUpdate(!update)
-        insertData(
+        const insertedData: string = await insertData(
             text,
             Number(timeNumber),
-            selectedTag,
-            new Date().toISOString()
+            selectedTag
         )
+        updateDbTotalsStore()
+        updateWeekDataStore(selectedDate)
         setVisible(false)
+        // showSnackbar(insertedData)
     }
 
     return (
         <View>
-            <Button
-                radius={'xl'}
-                type="solid"
-                buttonStyle={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 30,
-                    paddingVertical: 8,
-                    paddingHorizontal: 16,
-                    backgroundColor: '#FF6A8C',
-                }}
-                onPress={showDialog}
-            >
-                <Icon
-                    name="plus"
-                    color="white"
-                    size={28}
-                    type="font-awesome-5"
-                />
-            </Button>
-
+            <TouchableOpacity onPress={showDialog}>
+                <View className="flex flex-row w-24 justify-center items-center bg-custom-pink rounded-xl h-20 mt-4 p-4">
+                    <FontAwesome name="plus" size={40} color="white" />
+                </View>
+            </TouchableOpacity>
             <Dialog.Container visible={visible}>
                 <Dialog.Title
                     style={{ fontSize: 24, fontWeight: 'bold', margin: 12 }}

@@ -5,15 +5,9 @@ import { Icon, Button, Input } from '@rneui/themed'
 import { Picker } from '@react-native-picker/picker'
 import { insertData } from '../services/DatabaseService'
 import { TextInput } from 'react-native-paper'
-import { UpdateContext } from '../contexts/updateContext'
 
 export const EditDialog = () => {
     const tags = ['cat', 'dove', 'horse', 'dog', 'otter']
-    const context = useContext(UpdateContext)
-    if (!context) {
-        throw new Error('UpdateContext is not provided')
-    }
-    const { update, setUpdate } = context
     const [visible, setVisible] = useState(false)
     const [textIsNull, setTextIsNull] = useState(false)
     const [text, setText] = useState('')
@@ -55,8 +49,7 @@ export const EditDialog = () => {
             setTextIsNull(true)
             return
         }
-        setUpdate(!update)
-        insertData(text, Number(number), tag, new Date().toISOString())
+        insertData(text, Number(number), tag)
         setVisible(false)
     }
 

@@ -3,13 +3,21 @@ import { useRoute, RouteProp } from '@react-navigation/native'
 import { Icon, Input, Button } from '@rneui/base'
 import { RootStackParamList } from '../routes/route'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { ProviderProps, useState } from 'react'
+import { ProviderProps, useContext, useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { tags, timeNumbers } from '../config/config'
+import { deleteData } from '../services/DatabaseService'
+import {
+    updateAllRowStore,
+    updateDbTotalsStore,
+    updateWeekDataStore,
+} from '../../state/dbStore'
+import { useSelectedDateStore } from '../../state/appState'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Detail' | 'HomeDetail'>
 
 export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
+    const { selectedDate } = useSelectedDateStore()
     const { saveData } = route.params
     const [timeNumber, setTimeNumber] = useState(saveData.time)
     const [selectedTag, setSelectedTag] = useState(saveData.tag)
@@ -18,6 +26,14 @@ export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
     const validateText = (text: string): boolean => {
         return text.trim().length > 0
+    }
+
+    const handleDelete = () => {
+        deleteData(saveData.id)
+        updateAllRowStore()
+        updateDbTotalsStore()
+        updateWeekDataStore(selectedDate)
+        navigation.navigate('HistoryScreen')
     }
     return (
         <SafeAreaView className="flex-1 bg-custom-lightblue">
@@ -93,10 +109,24 @@ export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
             </View>
             <View className="flex-row justify-evenly">
                 <Button
-                    title="更新"
+                    title="Delete"
                     titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
                     buttonStyle={{
                         backgroundColor: '#FF6A8C',
+                        borderRadius: 16,
+                    }}
+                    containerStyle={{
+                        width: 150,
+                    }}
+                    onPress={() => {
+                        handleDelete()
+                    }}
+                />
+                <Button
+                    title="Edit"
+                    titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+                    buttonStyle={{
+                        backgroundColor: '#00499A',
                         borderRadius: 16,
                     }}
                     containerStyle={{
