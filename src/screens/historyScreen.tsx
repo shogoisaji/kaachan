@@ -23,13 +23,8 @@ export const HistoryScreen: React.FC<Props> = ({ navigation }) => {
     const { allRow, setAllRow } = AllRowStore()
     const windowHeight = useWindowDimensions().height
     const [dataList, setDataList] = useState([])
-    // const fetchDataAsync = async () => {
-    //     const data = await fetchAllData()
-    //     setDataList(data)
-    // }
     useEffect(() => {
         updateAllRowStore()
-        // fetchDataAsync()
     }, [])
     const items = allRow.map((item: SaveDataTypes, index: number) => {
         return (

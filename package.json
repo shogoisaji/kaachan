@@ -9,6 +9,7 @@
         "web": "expo start --web"
     },
     "dependencies": {
+        "@react-native-async-storage/async-storage": "^1.21.0",
         "@react-native-community/push-notification-ios": "^1.11.0",
         "@react-native-picker/picker": "2.4.10",
         "@react-navigation/bottom-tabs": "^6.5.11",
@@ -25,10 +26,12 @@
         "expo-file-system": "~15.4.5",
         "expo-sqlite": "~11.3.3",
         "expo-status-bar": "~1.6.0",
+        "moment": "^2.30.1",
         "nativewind": "^2.0.11",
         "react": "18.2.0",
         "react-native": "0.72.6",
         "react-native-chart-kit": "^6.12.0",
+        "react-native-date-picker": "^4.3.5",
         "react-native-dialog": "^9.3.0",
         "react-native-gesture-handler": "~2.12.0",
         "react-native-paper": "^5.11.6",

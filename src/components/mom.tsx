@@ -23,7 +23,7 @@ export const Mom = ({ animationState }: MomProps) => {
         <View className="flex-1 z-10 justify-end absolute top-12 left-4">
             <View className="h-32">
                 <Rive
-                    resourceName="mom2"
+                    resourceName="mom_animation"
                     artboardName="mom"
                     animationName={animationName}
                     autoplay={true}

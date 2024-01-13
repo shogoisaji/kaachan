@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import Dialog from 'react-native-dialog'
 import { TouchableOpacity, View } from 'react-native'
 import { Icon, Input } from '@rneui/themed'
@@ -6,14 +6,7 @@ import { Picker } from '@react-native-picker/picker'
 import { insertData } from '../services/DatabaseService'
 import { tags, timeNumbers } from '../config/config'
 import { FontAwesome } from '@expo/vector-icons'
-import { Button, Snackbar } from 'react-native-paper'
-import { useStore } from 'zustand'
-import { useInsertStore } from '../../state/insertState'
-import {
-    updateDbTotalsStore,
-    updateWeekDataStore,
-    useDbTotalsStore,
-} from '../../state/dbStore'
+import { updateDbTotalsStore, updateWeekDataStore } from '../../state/dbStore'
 import { useSelectedDateStore } from '../../state/appState'
 
 export const InputDialog = () => {
@@ -21,13 +14,13 @@ export const InputDialog = () => {
     const [visible, setVisible] = useState(false)
     const [textIsNull, setTextIsNull] = useState(false)
     const [text, setText] = useState('')
-    const [timeNumber, setTimeNumber] = useState('1.5')
+    const [timeNumber, setTimeNumber] = useState<number>(1.5)
     const [selectedTag, setSelectedTag] = useState(tags[0])
 
     const showDialog = () => {
         setTextIsNull(false)
         setSelectedTag(tags[0])
-        setTimeNumber('1.5')
+        setTimeNumber(1.5)
         setText('')
         setVisible(true)
     }
@@ -41,15 +34,10 @@ export const InputDialog = () => {
             setTextIsNull(true)
             return
         }
-        const insertedData: string = await insertData(
-            text,
-            Number(timeNumber),
-            selectedTag
-        )
+        await insertData(text, timeNumber, selectedTag)
         updateDbTotalsStore()
         updateWeekDataStore(selectedDate)
         setVisible(false)
-        // showSnackbar(insertedData)
     }
 
     return (
@@ -63,7 +51,7 @@ export const InputDialog = () => {
                 <Dialog.Title
                     style={{ fontSize: 24, fontWeight: 'bold', margin: 12 }}
                 >
-                    学習時間の登録
+                    学習記録の登録
                 </Dialog.Title>
                 <Dialog.Description>
                     学習した内容と時間を入力してください

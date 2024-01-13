@@ -1,46 +1,40 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import Dialog from 'react-native-dialog'
-import { View } from 'react-native'
-import { Icon, Button, Input } from '@rneui/themed'
+import { TouchableOpacity, View, Text } from 'react-native'
+import { Icon, Input } from '@rneui/themed'
 import { Picker } from '@react-native-picker/picker'
-import { insertData } from '../services/DatabaseService'
-import { TextInput } from 'react-native-paper'
+import {
+    insertData,
+    updateData as dataUpdate,
+} from '../services/DatabaseService'
+import { tags, timeNumbers } from '../config/config'
+import { FontAwesome } from '@expo/vector-icons'
+import { updateDbTotalsStore, updateWeekDataStore } from '../../state/dbStore'
+import { useSelectedDateStore } from '../../state/appState'
 
-export const EditDialog = () => {
-    const tags = ['cat', 'dove', 'horse', 'dog', 'otter']
-    const [visible, setVisible] = useState(false)
-    const [textIsNull, setTextIsNull] = useState(false)
-    const [text, setText] = useState('')
-    const [number, setNumber] = useState('1.5')
-    const [tag, setTag] = useState(tags[0])
-    const numbers = [
-        '0.5',
-        '1.0',
-        '1.5',
-        '2.0',
-        '2.5',
-        '3.0',
-        '3.5',
-        '4.0',
-        '4.5',
-        '5.0',
-        '5.5',
-        '6.0',
-        '6.5',
-        '7.0',
-        '7.5',
-        '8.0',
-    ]
+type Props = {
+    initialData: SaveDataTypes
+    visible: boolean
+    setVisible: React.Dispatch<React.SetStateAction<boolean>>
+    onUpdate: (data: SaveDataTypes) => void
+}
 
-    const showDialog = () => {
-        setTextIsNull(false)
-        setTag(tags[0])
-        setNumber('1.5')
-        setText('')
-        setVisible(true)
-    }
+export const EditDialog: React.FC<Props> = ({
+    initialData,
+    visible,
+    setVisible,
+    onUpdate,
+}) => {
+    const { selectedDate, setSelectedDate } = useSelectedDateStore()
+    const [textIsNull, setTextIsNull] = useState<boolean>(false)
+    const [text, setText] = useState<string>(initialData.title)
+    const [timeNumber, setTimeNumber] = useState<number>(initialData.time)
+    const [selectedTag, setSelectedTag] = useState<string>(initialData.tag)
 
     const handleCancel = () => {
+        setText(initialData.title)
+        setTimeNumber(initialData.time)
+        setSelectedTag(initialData.tag)
         setVisible(false)
     }
 
@@ -49,38 +43,30 @@ export const EditDialog = () => {
             setTextIsNull(true)
             return
         }
-        insertData(text, Number(number), tag)
+        const updatedData: SaveDataTypes = {
+            id: initialData.id,
+            title: text,
+            time: Number(timeNumber),
+            tag: selectedTag,
+            createdAt: initialData.createdAt,
+        }
+        dataUpdate(updatedData)
+        updateDbTotalsStore()
+        updateWeekDataStore(selectedDate)
+        onUpdate(updatedData)
         setVisible(false)
     }
 
     return (
         <View>
-            <Button
-                radius={'xl'}
-                type="solid"
-                buttonStyle={{
-                    paddingVertical: 8,
-                    paddingHorizontal: 16,
-                    backgroundColor: '#FF6A8C',
-                }}
-                titleStyle={{ fontSize: 24 }}
-                iconRight={true}
-                onPress={showDialog}
-            >
-                Add
-                <Icon name="add" color="white" />
-            </Button>
-
             <Dialog.Container visible={visible}>
                 <Dialog.Title
                     style={{ fontSize: 24, fontWeight: 'bold', margin: 12 }}
                 >
-                    学習時間の登録
+                    学習記録の編集
                 </Dialog.Title>
-                <Dialog.Description>
-                    学習した内容と時間を入力してください
-                </Dialog.Description>
                 <Input
+                    value={text}
                     style={{
                         borderWidth: 1,
                         borderColor: textIsNull ? 'red' : 'lightgray',
@@ -99,23 +85,27 @@ export const EditDialog = () => {
                                 name={iconName}
                                 type="font-awesome-5"
                                 color={
-                                    tag == iconName ? '#067CFF' : 'lightgray'
+                                    selectedTag == iconName
+                                        ? '#067CFF'
+                                        : 'lightgray'
                                 }
                                 size={24}
-                                onPress={() => setTag(iconName)}
+                                onPress={() => setSelectedTag(iconName)}
                             />
                         ))}
                     </View>
                     <View className="items-center justify-center">
                         <Picker
                             style={{ height: 200, width: 150, marginTop: -30 }}
-                            selectedValue={number}
-                            onValueChange={(itemValue) => setNumber(itemValue)}
+                            selectedValue={timeNumber}
+                            onValueChange={(itemValue) =>
+                                setTimeNumber(itemValue)
+                            }
                         >
-                            {numbers.map((value) => (
+                            {timeNumbers.map((value) => (
                                 <Picker.Item
                                     key={value}
-                                    label={value + ' h'}
+                                    label={`${value} h`}
                                     value={value}
                                 />
                             ))}
@@ -127,7 +117,7 @@ export const EditDialog = () => {
                     onPress={handleCancel}
                     color="red"
                 />
-                <Dialog.Button label="Add" onPress={handleConfirm} />
+                <Dialog.Button label="Save" onPress={handleConfirm} />
             </Dialog.Container>
         </View>
     )

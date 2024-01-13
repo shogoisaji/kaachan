@@ -245,17 +245,16 @@ export const fetchTotalsData = (): Promise<Totals> => {
     })
 }
 
-export const updateData = (
-    id: number,
-    title: string,
-    time: number,
-    tag: string,
-    createdAt: string
-): void => {
+export const updateData = (updateData: {
+    id: number
+    title: string
+    time: number
+    tag: string
+}): void => {
     db.transaction((tx) => {
         tx.executeSql(
-            'UPDATE MyTable SET title = ?, time = ?, tag = ?, createdAt = ? WHERE id = ?;',
-            [title, time, tag, createdAt, id],
+            'UPDATE MyTable SET title = ?, time = ?, tag = ? WHERE id = ?;',
+            [updateData.title, updateData.time, updateData.tag, updateData.id],
             (tx, results) => {
                 console.log('Data updated successfully')
             },
