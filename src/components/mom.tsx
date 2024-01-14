@@ -7,27 +7,20 @@ interface MomProps {
 }
 
 export const Mom = ({ animationState }: MomProps) => {
-    const [animationName, setAnimationName] = useState<string>('normal')
-
     const riveStyle: StyleProp<ViewStyle> = {
         width: 100,
         height: 100,
         transform: [{ scaleX: -1 }],
     }
 
-    useEffect(() => {
-        setAnimationName(animationState)
-    }, [])
-
     return (
-        // <View className="flex-1 z-10 justify-end absolute top-12 left-4">
-        <View className="flex h-24 items-end">
+        <View className="flex h-32 items-end">
             <Rive
                 resourceName="mom_animation"
                 artboardName="mom"
-                animationName={animationName}
+                animationName={animationState}
                 autoplay={true}
-                fit={Fit.Contain}
+                fit={Fit.FitHeight}
                 style={riveStyle}
             />
         </View>

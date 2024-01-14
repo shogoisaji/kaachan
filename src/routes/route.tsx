@@ -86,7 +86,12 @@ export const RootRoutes = () => {
                     tabBarShowLabel: false,
                     tabBarActiveTintColor: '#FF6A8C',
                     tabBarInactiveTintColor: 'white',
-                    tabBarStyle: { backgroundColor: '#00499A', paddingTop: 12 },
+                    tabBarStyle: {
+                        height: 70,
+                        backgroundColor: '#00499A',
+                        paddingTop: 8,
+                        paddingBottom: 20,
+                    },
                 })}
             >
                 <Tab.Screen

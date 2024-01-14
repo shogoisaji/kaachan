@@ -15,9 +15,11 @@ const _handleAppStateChange = (nextAppState: string) => {
 
 const _registerLocalNotification = (registerDate: NotificationTimeTypes) => {
     const messages = [
-        '今日は勉強したんか〜?',
-        '今日はたくさん勉強したのかな？',
+        '今日は勉強したんか〜?記録しときなさいよ！',
+        '今日はたくさん勉強したのかな？記録しておこうか',
         '今日の勉強の記録をしましょう',
+        '忘れずに今日の勉強結果を記録しておくこと',
+        '今日の勉強時間を記録しておくことを忘れないで',
     ]
     const message = messages[Math.floor(Math.random() * messages.length)]
 

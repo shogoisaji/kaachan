@@ -1,12 +1,12 @@
 import { create } from 'zustand'
-import { currentDate } from '../src/utils/utils'
+import { currentDateString } from '../src/utils/utils'
 
 interface selectDate {
-    selectedDate: Date
-    setSelectedDate: (date: Date) => void
+    selectedDate: string
+    setSelectedDate: (date: string) => void
 }
 
 export const useSelectedDateStore = create<selectDate>((set) => ({
-    selectedDate: currentDate(),
+    selectedDate: currentDateString(),
     setSelectedDate: (date) => set((_) => ({ selectedDate: date })),
 }))

@@ -12,13 +12,16 @@ import {
     updateDbTotalsStore,
     updateWeekDataStore,
 } from '../../state/dbStore'
-import { useSelectedDateStore } from '../../state/appState'
+import { useSelectedDateStore } from '../../state/selectedDateStore'
 import { EditDialog } from '../components/editDialog'
+import { DeleteDialog } from '../components/deleteDialog'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Detail' | 'HomeDetail'>
 
 export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
     const [editDialogVisible, setEditDialogVisible] = useState<boolean>(false)
+    const [deleteDialogVisible, setDeleteDialogVisible] =
+        useState<boolean>(false)
     const { selectedDate } = useSelectedDateStore()
     const { saveData } = route.params
     const [timeNumber, setTimeNumber] = useState<number>(saveData.time)
@@ -29,6 +32,10 @@ export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
     const showEditDialog = () => {
         setTextIsNull(false)
         setEditDialogVisible(true)
+    }
+
+    const showDeleteDialog = () => {
+        setDeleteDialogVisible(true)
     }
 
     const handleEditDialogCancel = () => {
@@ -45,15 +52,20 @@ export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
         setSelectedTag(data.tag)
     }
 
-    const handleDelete = () => {
-        deleteData(saveData.id)
-        updateAllRowStore()
-        updateDbTotalsStore()
-        updateWeekDataStore(selectedDate)
-        navigation.navigate('HistoryScreen')
+    const handleDelete = (isDelete: boolean) => {
+        if (isDelete) {
+            navigation.navigate('HistoryScreen')
+        }
+        console.log('delete')
     }
     return (
         <SafeAreaView className="flex-1 bg-custom-lightblue">
+            <DeleteDialog
+                data={saveData}
+                visible={deleteDialogVisible}
+                setVisible={setDeleteDialogVisible}
+                onDelete={handleDelete}
+            />
             <EditDialog
                 initialData={saveData}
                 visible={editDialogVisible}
@@ -67,15 +79,6 @@ export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
                 </Text>
                 <View className="h-1 w-32 bg-custom-darkblue" />
             </View>
-            {/* <View className="flex-row justify-start m-4">
-                <Icon
-                    name="chevron-left"
-                    color="#00499A"
-                    size={32}
-                    type="font-awesome-5"
-                    onPress={() => navigation.goBack()}
-                />
-            </View> */}
             <View className="m-8">
                 <View className="flex-row justify-center p-4 bg-custom-blue rounded-xl">
                     <Text className=" text-3xl font-bold text-white">
@@ -114,7 +117,7 @@ export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
                             width: 150,
                         }}
                         onPress={() => {
-                            handleDelete()
+                            setDeleteDialogVisible(true)
                         }}
                     />
                     <Button

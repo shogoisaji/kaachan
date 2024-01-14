@@ -7,10 +7,13 @@ import { insertData } from '../services/DatabaseService'
 import { tags, timeNumbers } from '../config/config'
 import { FontAwesome } from '@expo/vector-icons'
 import { updateDbTotalsStore, updateWeekDataStore } from '../../state/dbStore'
-import { useSelectedDateStore } from '../../state/appState'
+import { useSelectedDateStore } from '../../state/selectedDateStore'
+import { getMomState } from '../utils/momState'
+import { useMomStateStore } from '../../state/momStateStore'
 
 export const InputDialog = () => {
     const { selectedDate, setSelectedDate } = useSelectedDateStore()
+    const { momState, setMomState } = useMomStateStore()
     const [visible, setVisible] = useState(false)
     const [textIsNull, setTextIsNull] = useState(false)
     const [text, setText] = useState('')
@@ -35,8 +38,9 @@ export const InputDialog = () => {
             return
         }
         await insertData(text, timeNumber, selectedTag)
-        updateDbTotalsStore()
+        updateDbTotalsStore(selectedDate)
         updateWeekDataStore(selectedDate)
+        getMomState(setMomState)
         setVisible(false)
     }
 

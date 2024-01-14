@@ -64,7 +64,9 @@ export const SettingScreen: React.FC = () => {
                         通知時間
                     </Text>
                     <TouchableOpacity
+                        activeOpacity={0.8}
                         onPress={() => {
+                            console.log('pressed', noticeState)
                             if (!noticeState) return
                             setPickerVisible(true)
                         }}
@@ -87,6 +89,19 @@ export const SettingScreen: React.FC = () => {
                     </TouchableOpacity>
                 </View>
             </View>
+            <DatePicker
+                modal
+                mode="time"
+                open={pickerVisible}
+                date={selectedTime}
+                onConfirm={(date) => {
+                    handlePicConfirm(date)
+                    setPickerVisible(false)
+                }}
+                onCancel={() => {
+                    setPickerVisible(false)
+                }}
+            />
         </SafeAreaView>
     )
 }

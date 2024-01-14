@@ -1,16 +1,12 @@
 import React, { useState } from 'react'
 import Dialog from 'react-native-dialog'
-import { TouchableOpacity, View, Text } from 'react-native'
+import { View, Text } from 'react-native'
 import { Icon, Input } from '@rneui/themed'
 import { Picker } from '@react-native-picker/picker'
-import {
-    insertData,
-    updateData as dataUpdate,
-} from '../services/DatabaseService'
+import { updateData as dataUpdate } from '../services/DatabaseService'
 import { tags, timeNumbers } from '../config/config'
-import { FontAwesome } from '@expo/vector-icons'
 import { updateDbTotalsStore, updateWeekDataStore } from '../../state/dbStore'
-import { useSelectedDateStore } from '../../state/appState'
+import { useSelectedDateStore } from '../../state/selectedDateStore'
 
 type Props = {
     initialData: SaveDataTypes
@@ -51,7 +47,7 @@ export const EditDialog: React.FC<Props> = ({
             createdAt: initialData.createdAt,
         }
         dataUpdate(updatedData)
-        updateDbTotalsStore()
+        updateDbTotalsStore(selectedDate)
         updateWeekDataStore(selectedDate)
         onUpdate(updatedData)
         setVisible(false)

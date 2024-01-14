@@ -4,7 +4,6 @@ import {
     fetchTotalsData,
     fetchWeekData,
 } from '../src/services/DatabaseService'
-import { useSelectedDateStore } from './appState'
 
 interface DbTotals {
     dbTotals: { day: number; week: number; month: number }
@@ -18,13 +17,17 @@ const dbTotalsStore = create<DbTotals>((set) => ({
 
 export const useDbTotalsStore = dbTotalsStore
 
-export const updateDbTotalsStore = async () => {
-    const fetchData = (await fetchTotalsData()) as {
-        day: number
-        week: number
-        month: number
+export const updateDbTotalsStore = async (selectedDate: string) => {
+    try {
+        const fetchData = (await fetchTotalsData(selectedDate)) as {
+            day: number
+            week: number
+            month: number
+        }
+        dbTotalsStore.getState().setDbTotals(fetchData)
+    } catch (error) {
+        console.error('Error occurred while updating DbTotalsStore.', error)
     }
-    dbTotalsStore.getState().setDbTotals(fetchData)
 }
 
 interface WeekData {
@@ -39,9 +42,13 @@ export const weekDataStore = create<WeekData>((set) => ({
 
 export const useWeekDataStore = weekDataStore
 
-export const updateWeekDataStore = async (date: Date) => {
-    const fetchData = (await fetchWeekData(new Date(date))) as number[]
-    weekDataStore.getState().setWeekData(fetchData)
+export const updateWeekDataStore = async (date: string) => {
+    try {
+        const fetchData = (await fetchWeekData(date)) as number[]
+        weekDataStore.getState().setWeekData(fetchData)
+    } catch (error) {
+        console.error('Error occurred while updating WeekDataStore.', error)
+    }
 }
 
 interface AllRow {
@@ -57,9 +64,16 @@ export const AllRowStore = create<AllRow>((set) => ({
 export const useAllRowStore = AllRowStore
 
 export const updateAllRowStore = async () => {
-    const fetchData = (await fetchAllData()) as SaveDataTypes[] //恐らくこの非同期処理でソートが崩れる
-    const sortedData = fetchData.sort((a, b) => {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    })
-    AllRowStore.getState().setAllRow(sortedData)
+    try {
+        const fetchData = (await fetchAllData()) as SaveDataTypes[]
+        const sortedData = fetchData.sort((a, b) => {
+            return (
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+        })
+        AllRowStore.getState().setAllRow(sortedData)
+    } catch (error) {
+        console.error('Error occurred while updating AllRowStore.', error)
+    }
 }

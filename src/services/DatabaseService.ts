@@ -1,38 +1,19 @@
 import * as SQLite from 'expo-sqlite'
-import { currentDate, currentDateString, getMonday } from '../utils/utils'
+import { currentDateString, getMonday } from '../utils/utils'
+import dayjs from 'dayjs'
 
 let db = SQLite.openDatabase('MyDB')
 
 export const createTable = (): void => {
     db.transaction((tx) => {
         tx.executeSql(
-            'SELECT name FROM sqlite_master WHERE type="table" AND name="MyTable";',
+            'CREATE TABLE IF NOT EXISTS MyTable (id INTEGER PRIMARY KEY, title TEXT, time REAL, tag TEXT, createdAt TEXT);',
             [],
-            (tx, results) => {
-                if (results.rows.length === 0) {
-                    tx.executeSql(
-                        'CREATE TABLE IF NOT EXISTS MyTable (id INTEGER PRIMARY KEY, title TEXT, time REAL, tag TEXT, createdAt TEXT);',
-                        [],
-                        () => {
-                            console.log('Table created successfully')
-                        },
-                        (error) => {
-                            console.error(
-                                'Error occurred while creating the table.',
-                                error
-                            )
-                            return false
-                        }
-                    )
-                } else {
-                    console.log('Table already exists')
-                }
+            () => {
+                console.log('Table created successfully')
             },
             (error) => {
-                console.error(
-                    'Error occurred while checking if the table exists.',
-                    error
-                )
+                console.error('Error occurred while creating the table.', error)
                 return false
             }
         )
@@ -46,8 +27,8 @@ export const insertData = (
 ): Promise<string> => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
-            const createdAt = currentDateString() //2024-01-10T16:08:15+09:00
-            console.log('createdAt', createdAt)
+            // const createdAt = currentDateString() //2024-01-10T16:08:15+09:00
+            const createdAt = new Date().toISOString() //2024-01-14T07:00:46.411Z
             tx.executeSql(
                 'INSERT INTO MyTable (title, time, tag, createdAt) VALUES (?, ?, ?, ?);',
                 [title, time, tag, createdAt],
@@ -66,6 +47,41 @@ export const insertData = (
             )
         })
     })
+}
+
+export const fetchSevenDaysData = (): Promise<number[]> => {
+    let promises: Promise<number>[] = []
+    for (let i = 0; i < 7; i++) {
+        const targetDate = dayjs().subtract(i, 'day')
+        const targetDateString = targetDate.toISOString()
+        promises.push(
+            new Promise((resolve, reject) => {
+                db.transaction((tx) => {
+                    tx.executeSql(
+                        'SELECT * FROM MyTable WHERE DATE(createdAt) = DATE(?);',
+                        [targetDateString],
+                        (tx, results) => {
+                            let rows = results.rows._array
+                            let sum = 0
+                            rows.forEach((row) => {
+                                sum += row.time
+                            })
+                            resolve(sum)
+                        },
+                        (error) => {
+                            console.error(
+                                'データの取得中にエラーが発生しました。',
+                                error
+                            )
+                            reject(error)
+                            return false
+                        }
+                    )
+                })
+            })
+        )
+    }
+    return Promise.all(promises)
 }
 
 export const fetchAllData = (): Promise<any> => {
@@ -112,16 +128,15 @@ export const fetchDateData = (date: string): Promise<number> => {
     })
 }
 
-export const fetchWeekData = (date: Date): Promise<number[]> => {
+export const fetchWeekData = (date: string): Promise<number[]> => {
     return new Promise(async (resolve, reject) => {
-        const monday = getMonday(date)
+        const mondayString = getMonday(date)
+        const monday = dayjs(mondayString)
         let promises: Promise<number>[] = []
 
         for (let i = 0; i < 7; i++) {
             // i日を加算した日付を取得
-            const targetDate = new Date(
-                monday.getTime() + i * 24 * 60 * 60 * 1000
-            )
+            const targetDate = monday.add(i, 'day')
             const targetDateString = targetDate.toISOString().slice(0, 10)
             promises.push(fetchDateData(targetDateString))
         }
@@ -140,8 +155,7 @@ export const fetchWeekData = (date: Date): Promise<number[]> => {
 
 type Totals = { day: number; week: number; month: number }
 
-export const fetchTotalsData = (): Promise<Totals> => {
-    // const currentDateString: string = currentDateString()//2024-01-10T16:08:15+09:00
+export const fetchTotalsData = (selectedDate: string): Promise<Totals> => {
     return new Promise((resolve, reject) => {
         let totals: Totals = {
             day: 0,
@@ -171,11 +185,10 @@ export const fetchTotalsData = (): Promise<Totals> => {
         promises.push(
             new Promise<void>((resolve, reject) => {
                 db.transaction((tx) => {
-                    const monday = getMonday(currentDate())
+                    const mondayString = getMonday(selectedDate)
+                    const monday = dayjs(mondayString)
                     for (let i = 0; i < 7; i++) {
-                        const targetDate = new Date(
-                            monday.getTime() + i * 24 * 60 * 60 * 1000
-                        )
+                        const targetDate = monday.add(i, 'day')
                         const targetDateString = targetDate
                             .toISOString()
                             .slice(0, 10)
@@ -198,15 +211,17 @@ export const fetchTotalsData = (): Promise<Totals> => {
         )
         promises.push(
             new Promise<void>((resolve, reject) => {
+                const monday = getMonday(selectedDate)
+                const convertedDate = dayjs(monday)
                 db.transaction((tx) => {
                     const firstDayOfMonth = new Date(
-                        currentDate().getFullYear(),
-                        currentDate().getMonth(),
+                        convertedDate.year(),
+                        convertedDate.month(),
                         1
                     )
                     const lastDayOfMonth = new Date(
-                        currentDate().getFullYear(),
-                        currentDate().getMonth() + 1,
+                        convertedDate.year(),
+                        convertedDate.month() + 1,
                         0
                     )
                     const firstDayString = firstDayOfMonth

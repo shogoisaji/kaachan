@@ -5,11 +5,12 @@ import timezone from 'dayjs/plugin/timezone'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-export const getMonday = (date: Date): Date => {
-    const day: number = date.getDay() // 曜日を取得 0~6
-    const diff: number = date.getDate() - day + (day === 0 ? -6 : 1) // 月曜日までの差分を計算
-    return new Date(date.getFullYear(), date.getMonth(), diff + 1)
+export const getMonday = (date: string): string => {
+    const convertDate = dayjs(date)
+    const day: number = convertDate.day() // 曜日を取得 0(日曜日)~6(土曜日)
+    const diff: number = day === 0 ? 6 : day - 1 // 日曜日の場合は6を減算、それ以外は1を減算
+    return convertDate.subtract(diff, 'day').format()
 }
 
-export const currentDate = () => dayjs().locale(dayjs.tz.guess()).toDate()
+// export const currentDate = () => dayjs().locale(dayjs.tz.guess()).toDate()
 export const currentDateString = () => dayjs().locale(dayjs.tz.guess()).format()
