@@ -87,42 +87,6 @@ export const SettingScreen: React.FC = () => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View className="flex-row justify-center items-center">
-                <Text>通知時間</Text>
-                <Text>
-                    {notificationTime.hour.toString().padStart(2, '0')}:
-                    {notificationTime.minuit.toString().padStart(2, '0')}
-                </Text>
-            </View>
-
-            <Button
-                title="notice"
-                titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
-                buttonStyle={{
-                    backgroundColor: '#00499A',
-                    borderRadius: 16,
-                }}
-                containerStyle={{
-                    width: 150,
-                }}
-                onPress={() => {
-                    handleRegister()
-                }}
-            />
-            <Button title="Open" onPress={() => setPickerVisible(true)} />
-            <DatePicker
-                modal
-                mode="time"
-                open={pickerVisible}
-                date={selectedTime}
-                onConfirm={(date) => {
-                    handlePicConfirm(date)
-                    setPickerVisible(false)
-                }}
-                onCancel={() => {
-                    setPickerVisible(false)
-                }}
-            />
         </SafeAreaView>
     )
 }

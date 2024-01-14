@@ -1,5 +1,5 @@
 import { View, Text, useWindowDimensions } from 'react-native'
-import { BarChart } from 'react-native-chart-kit'
+// import { BarChart } from 'react-native-chart-kit'
 import { FontAwesome } from '@expo/vector-icons'
 import { useContext, useEffect, useState } from 'react'
 import { fetchWeekData } from '../services/DatabaseService'
@@ -7,13 +7,10 @@ import { currentDate, getMonday } from '../utils/utils'
 import { useInsertStore } from '../../state/insertState'
 import { useSelectedDateStore } from '../../state/appState'
 import { updateWeekDataStore, weekDataStore } from '../../state/dbStore'
-
-// interface UpdateContextType {
-//     update: boolean
-//     setUpdate: React.Dispatch<React.SetStateAction<boolean>>
-// }
+import { BarChart } from 'react-native-gifted-charts'
 
 export const VerticalChart: React.FC = () => {
+    const [spacing, setSpacing] = useState<number>(24)
     const { selectedDate, setSelectedDate } = useSelectedDateStore()
     const { weekData, setWeekData } = weekDataStore()
     const { isInserted } = useInsertStore((state) => ({
@@ -22,9 +19,6 @@ export const VerticalChart: React.FC = () => {
     }))
     const windowWidth = useWindowDimensions().width
     const windowHeight = useWindowDimensions().height
-    // const [weeklyData, setWeeklyData] = useState<number[]>([])
-    // const [targetDate, setTargetDate] = useState<Date>(currentDate)
-    // const monday = getMonday(targetDate)
 
     const daysLabel = (): string[] => {
         const monday = getMonday(selectedDate)
@@ -43,16 +37,28 @@ export const VerticalChart: React.FC = () => {
 
     const chartData = {
         labels: daysLabel(),
-        datasets: [
-            {
-                data: weekData,
-            },
-        ],
+        data: weekData,
     }
-
-    const setCurrentDate = () => {
-        setSelectedDate(currentDate())
-    }
+    const todayLabel = `${new Date().getMonth() + 1}/${new Date().getDate()}`
+    const barData = chartData.data.map((dataPoint, index) => ({
+        value: dataPoint,
+        label: chartData.labels[index],
+        spacing: spacing,
+        labelWidth: 0,
+        labelTextStyle:
+            chartData.labels[index] === todayLabel
+                ? { color: '#00499A', fontWeight: 'bold' }
+                : { color: 'gray' },
+        frontColor: '#067CFF',
+        topLabelComponent: () => (
+            <View className="flex-col items-center w-10">
+                <Text className="text-lg text-custom-darkblue">
+                    {dataPoint === 0 ? '' : dataPoint}
+                </Text>
+                <View className="h-3" />
+            </View>
+        ),
+    }))
 
     const nextWeek = () => {
         const newDate = new Date(
@@ -71,38 +77,40 @@ export const VerticalChart: React.FC = () => {
     useEffect(() => {
         updateWeekDataStore(selectedDate)
     }, [selectedDate])
-
     return (
-        <View className="flex-1 bg-custom-beige rounded-2xl p-3">
+        <View className="flex-1 bg-custom-blue rounded-2xl p-3">
             <View className="flex flex-row items-center justify-center mb-2">
-                <View className="flex flex-row absolute top-1 right-1">
-                    <FontAwesome
-                        name="calendar-minus-o"
-                        size={24}
-                        color="#00499A"
-                        onPress={() => {
-                            setCurrentDate()
-                        }}
-                    />
-                </View>
-
                 <FontAwesome
                     name="angle-left"
                     size={30}
-                    color="#00499A"
+                    color="white"
                     onPress={() => prevWeek()}
                 />
-                <Text className="text-xl font-bold text-custom-darkblue mx-8">
-                    Week
-                </Text>
+                <Text className="text-xl font-bold text-white mx-8">Week</Text>
                 <FontAwesome
                     name="angle-right"
                     size={30}
-                    color="#00499A"
+                    color="white"
                     onPress={() => nextWeek()}
                 />
             </View>
-            <BarChart
+            <View className="bg-white pt-4 pb-2 rounded-xl">
+                <BarChart
+                    data={barData}
+                    barWidth={16}
+                    spacing={14}
+                    roundedTop
+                    hideRules
+                    xAxisThickness={1}
+                    xAxisColor={'gray'}
+                    yAxisColor={'gray'}
+                    yAxisThickness={1}
+                    yAxisTextStyle={{ color: 'gray' }}
+                    noOfSections={5}
+                    maxValue={10}
+                />
+            </View>
+            {/* <BarChart
                 data={chartData}
                 width={windowWidth * 0.85}
                 height={windowHeight / 3.5}
@@ -113,14 +121,14 @@ export const VerticalChart: React.FC = () => {
                 showValuesOnTopOfBars={true}
                 chartConfig={{
                     barPercentage: 0.4,
-                    backgroundColor: '#FFDD9B',
-                    backgroundGradientFrom: '#FFDD9B',
-                    backgroundGradientTo: '#FFDD9B',
+                    backgroundColor: '#067CFF',
+                    backgroundGradientFrom: '#067CFF',
+                    backgroundGradientTo: '#067CFF',
                     decimalPlaces: 1,
-                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 }}
                 verticalLabelRotation={0}
-            />
+            /> */}
         </View>
     )
 }

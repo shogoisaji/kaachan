@@ -20,17 +20,17 @@ export const Mom = ({ animationState }: MomProps) => {
     }, [])
 
     return (
-        <View className="flex-1 z-10 justify-end absolute top-12 left-4">
-            <View className="h-32">
-                <Rive
-                    resourceName="mom_animation"
-                    artboardName="mom"
-                    animationName={animationName}
-                    autoplay={true}
-                    fit={Fit.Contain}
-                    style={riveStyle}
-                />
-            </View>
+        // <View className="flex-1 z-10 justify-end absolute top-12 left-4">
+        <View className="flex h-24 items-end">
+            <Rive
+                resourceName="mom_animation"
+                artboardName="mom"
+                animationName={animationName}
+                autoplay={true}
+                fit={Fit.Contain}
+                style={riveStyle}
+            />
         </View>
+        // </View>
     )
 }

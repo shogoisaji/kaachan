@@ -8,6 +8,7 @@ module.exports = {
                 'custom-darkblue': '#00499A',
                 'custom-lightblue': '#9FC7FF',
                 'custom-lightpink': '#FFC7C9',
+                'custom-lightbeige': '#FFFCF0',
                 'custom-beige': '#FFDD9B',
                 'custom-pink': '#FF6A8C',
                 'custom-yellow': '#FFC900',

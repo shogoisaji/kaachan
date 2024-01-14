@@ -64,7 +64,7 @@ export const InputDialog = () => {
                         padding: 10,
                     }}
                     inputContainerStyle={{ borderBottomWidth: 0 }}
-                    placeholder='例) "英語の勉強"'
+                    placeholder="例) 英語の勉強"
                     onChangeText={(value) => setText(value)}
                 />
                 <View className="flex flex-row justify-evenly">
