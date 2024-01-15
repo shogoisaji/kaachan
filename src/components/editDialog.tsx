@@ -5,7 +5,11 @@ import { Icon, Input } from '@rneui/themed'
 import { Picker } from '@react-native-picker/picker'
 import { updateData as dataUpdate } from '../services/DatabaseService'
 import { tags, timeNumbers } from '../config/config'
-import { updateDbTotalsStore, updateWeekDataStore } from '../../state/dbStore'
+import {
+    updateDbTotalsStore,
+    updateTriggerStore,
+    updateWeekDataStore,
+} from '../../state/dbStore'
 import { useSelectedDateStore } from '../../state/selectedDateStore'
 
 type Props = {
@@ -26,6 +30,7 @@ export const EditDialog: React.FC<Props> = ({
     const [text, setText] = useState<string>(initialData.title)
     const [timeNumber, setTimeNumber] = useState<number>(initialData.time)
     const [selectedTag, setSelectedTag] = useState<string>(initialData.tag)
+    const { update, setUpdate } = updateTriggerStore()
 
     const handleCancel = () => {
         setText(initialData.title)
@@ -50,6 +55,7 @@ export const EditDialog: React.FC<Props> = ({
         updateDbTotalsStore(selectedDate)
         updateWeekDataStore(selectedDate)
         onUpdate(updatedData)
+        setUpdate(!update)
         setVisible(false)
     }
 

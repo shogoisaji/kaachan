@@ -6,7 +6,11 @@ import { Picker } from '@react-native-picker/picker'
 import { insertData } from '../services/DatabaseService'
 import { tags, timeNumbers } from '../config/config'
 import { FontAwesome } from '@expo/vector-icons'
-import { updateDbTotalsStore, updateWeekDataStore } from '../../state/dbStore'
+import {
+    updateDbTotalsStore,
+    updateTriggerStore,
+    updateWeekDataStore,
+} from '../../state/dbStore'
 import { useSelectedDateStore } from '../../state/selectedDateStore'
 import { getMomState } from '../utils/momState'
 import { useMomStateStore } from '../../state/momStateStore'
@@ -19,6 +23,7 @@ export const InputDialog = () => {
     const [text, setText] = useState('')
     const [timeNumber, setTimeNumber] = useState<number>(1.5)
     const [selectedTag, setSelectedTag] = useState(tags[0])
+    const { update, setUpdate } = updateTriggerStore()
 
     const showDialog = () => {
         setTextIsNull(false)
@@ -41,13 +46,14 @@ export const InputDialog = () => {
         updateDbTotalsStore(selectedDate)
         updateWeekDataStore(selectedDate)
         getMomState(setMomState)
+        setUpdate(!update)
         setVisible(false)
     }
 
     return (
-        <View>
-            <TouchableOpacity onPress={showDialog}>
-                <View className="flex flex-row w-24 justify-center items-center bg-custom-pink rounded-xl h-20 mt-4 p-4">
+        <View className="">
+            <TouchableOpacity activeOpacity={0.7} onPress={showDialog}>
+                <View className="flex flex-row w-24 h-20 justify-center items-center shadow shadow-red-900 bg-custom-pink rounded-xl mt-4 p-4">
                     <FontAwesome name="plus" size={40} color="white" />
                 </View>
             </TouchableOpacity>

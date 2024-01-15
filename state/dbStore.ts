@@ -51,29 +51,25 @@ export const updateWeekDataStore = async (date: string) => {
     }
 }
 
-interface AllRow {
-    allRow: SaveDataTypes[]
-    setAllRow: (allData: SaveDataTypes[]) => void
+interface UpdateTriggerType {
+    update: boolean
+    setUpdate: (data: boolean) => void
 }
 
-export const AllRowStore = create<AllRow>((set) => ({
-    allRow: [],
-    setAllRow: (allData) => set((_) => ({ allRow: allData })),
+export const updateTriggerStore = create<UpdateTriggerType>((set) => ({
+    update: false,
+    setUpdate: (boolean: boolean) => set({ update: boolean }),
 }))
 
-export const useAllRowStore = AllRowStore
-
-export const updateAllRowStore = async () => {
-    try {
-        const fetchData = (await fetchAllData()) as SaveDataTypes[]
-        const sortedData = fetchData.sort((a, b) => {
-            return (
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-            )
-        })
-        AllRowStore.getState().setAllRow(sortedData)
-    } catch (error) {
-        console.error('Error occurred while updating AllRowStore.', error)
-    }
+interface CreateTableType {
+    isCreate: boolean
+    setIsCreate: (boolean: boolean) => void
 }
+
+export const createTableStore = create<CreateTableType>((set) => ({
+    isCreate: false,
+    setIsCreate: (boolean: boolean) => {
+        console.log('setIsCreate', boolean)
+        return set({ isCreate: boolean })
+    },
+}))

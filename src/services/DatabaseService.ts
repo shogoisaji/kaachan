@@ -4,19 +4,26 @@ import dayjs from 'dayjs'
 
 let db = SQLite.openDatabase('MyDB')
 
-export const createTable = (): void => {
-    db.transaction((tx) => {
-        tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS MyTable (id INTEGER PRIMARY KEY, title TEXT, time REAL, tag TEXT, createdAt TEXT);',
-            [],
-            () => {
-                console.log('Table created successfully')
-            },
-            (error) => {
-                console.error('Error occurred while creating the table.', error)
-                return false
-            }
-        )
+export const createTable = (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                'CREATE TABLE IF NOT EXISTS MyTable (id INTEGER PRIMARY KEY, title TEXT, time REAL, tag TEXT, createdAt TEXT);',
+                [],
+                () => {
+                    console.log('Table created successfully')
+                    resolve()
+                },
+                (error) => {
+                    console.error(
+                        'Error occurred while creating the table.',
+                        error
+                    )
+                    reject(error)
+                    return false
+                }
+            )
+        })
     })
 }
 
@@ -27,8 +34,8 @@ export const insertData = (
 ): Promise<string> => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
-            // const createdAt = currentDateString() //2024-01-10T16:08:15+09:00
-            const createdAt = new Date().toISOString() //2024-01-14T07:00:46.411Z
+            const createdAt = '2024-01-14T16:08:15' //2024-01-10T16:08:15
+            // const createdAt = currentDateString() //2024-01-10T16:08:15
             tx.executeSql(
                 'INSERT INTO MyTable (title, time, tag, createdAt) VALUES (?, ?, ?, ?);',
                 [title, time, tag, createdAt],
@@ -137,7 +144,7 @@ export const fetchWeekData = (date: string): Promise<number[]> => {
         for (let i = 0; i < 7; i++) {
             // i日を加算した日付を取得
             const targetDate = monday.add(i, 'day')
-            const targetDateString = targetDate.toISOString().slice(0, 10)
+            const targetDateString = targetDate.format('YYYY-MM-DD')
             promises.push(fetchDateData(targetDateString))
         }
 
@@ -189,9 +196,7 @@ export const fetchTotalsData = (selectedDate: string): Promise<Totals> => {
                     const monday = dayjs(mondayString)
                     for (let i = 0; i < 7; i++) {
                         const targetDate = monday.add(i, 'day')
-                        const targetDateString = targetDate
-                            .toISOString()
-                            .slice(0, 10)
+                        const targetDateString = targetDate.format('YYYY-MM-DD')
                         tx.executeSql(
                             'SELECT * FROM MyTable WHERE DATE(createdAt) = DATE(?);',
                             [targetDateString],

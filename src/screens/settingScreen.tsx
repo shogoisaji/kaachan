@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Switch, TouchableOpacity } from 'react-native'
+import {
+    View,
+    Text,
+    Switch,
+    TouchableOpacity,
+    ImageBackground,
+} from 'react-native'
 import { Button } from '@rneui/base'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
@@ -41,67 +47,80 @@ export const SettingScreen: React.FC = () => {
     }, [notificationTime, noticeState])
 
     return (
-        <SafeAreaView className="flex-1 bg-custom-lightblue">
-            <View className="flex flex-row justify-between items-center mt-2">
-                <View className="h-1 w-32 bg-custom-darkblue" />
-                <Text className="text-2xl font-bold text-custom-darkblue">
-                    Settings
-                </Text>
-                <View className="h-1 w-32 bg-custom-darkblue" />
-            </View>
-            <View className="m-8">
-                <View className="flex-row justify-between items-center py-4 pl-6 pr-4 mb-4 bg-custom-blue rounded-xl">
-                    <Text className="text-3xl text-white font-bold">通知</Text>
-                    <Switch
-                        trackColor={{ false: '#767577', true: '#FF6A8C' }}
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={toggleSwitch}
-                        value={noticeState}
-                    />
-                </View>
-                <View className="flex-row h-auto items-center justify-between py-4 pl-6 pr-4 bg-custom-blue rounded-xl">
-                    <Text className="text-3xl text-white font-bold">
-                        通知時間
-                    </Text>
-                    <TouchableOpacity
-                        activeOpacity={0.8}
-                        onPress={() => {
-                            console.log('pressed', noticeState)
-                            if (!noticeState) return
-                            setPickerVisible(true)
-                        }}
-                    >
-                        <View className="bg-white py-2 px-4 rounded-lg justify-center items-center">
-                            <Text
-                                className={`${
-                                    noticeState ? 'text-black' : 'text-gray-300'
-                                } text-4xl font-bold`}
-                            >
-                                {notificationTime.hour
-                                    .toString()
-                                    .padStart(2, '0')}
-                                :
-                                {notificationTime.minuit
-                                    .toString()
-                                    .padStart(2, '0')}
+        <View className="flex-1 bg-custom-lightblue">
+            <ImageBackground
+                source={require('../../assets/bg.png')}
+                style={{ width: '100%', height: '100%' }}
+            >
+                <SafeAreaView className="flex-1">
+                    <View className="flex flex-row justify-between items-center mt-2">
+                        <View className="h-1 w-32 bg-custom-darkblue" />
+                        <Text className="text-2xl font-bold text-custom-darkblue">
+                            Settings
+                        </Text>
+                        <View className="h-1 w-32 bg-custom-darkblue" />
+                    </View>
+                    <View className="m-8">
+                        <View className="flex-row justify-between items-center py-4 pl-6 pr-4 mb-6 shadow shadow-blue-800 bg-custom-blue rounded-xl">
+                            <Text className="text-3xl text-white font-bold">
+                                通知
                             </Text>
+                            <Switch
+                                trackColor={{
+                                    false: '#767577',
+                                    true: '#FF6A8C',
+                                }}
+                                ios_backgroundColor="#3e3e3e"
+                                onValueChange={toggleSwitch}
+                                value={noticeState}
+                            />
                         </View>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <DatePicker
-                modal
-                mode="time"
-                open={pickerVisible}
-                date={selectedTime}
-                onConfirm={(date) => {
-                    handlePicConfirm(date)
-                    setPickerVisible(false)
-                }}
-                onCancel={() => {
-                    setPickerVisible(false)
-                }}
-            />
-        </SafeAreaView>
+                        <View className="flex-row h-auto items-center justify-between py-4 pl-6 pr-4 shadow shadow-blue-800 bg-custom-blue rounded-xl">
+                            <Text className="text-3xl text-white font-bold">
+                                通知時間
+                            </Text>
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                onPress={() => {
+                                    if (!noticeState) return
+                                    setPickerVisible(true)
+                                }}
+                            >
+                                <View className="bg-white py-2 px-4 rounded-lg justify-center items-center">
+                                    <Text
+                                        className={`${
+                                            noticeState
+                                                ? 'text-black'
+                                                : 'text-gray-300'
+                                        } text-4xl font-bold`}
+                                    >
+                                        {notificationTime.hour
+                                            .toString()
+                                            .padStart(2, '0')}
+                                        :
+                                        {notificationTime.minuit
+                                            .toString()
+                                            .padStart(2, '0')}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <DatePicker
+                        modal
+                        mode="time"
+                        open={pickerVisible}
+                        date={selectedTime}
+                        onConfirm={(date) => {
+                            handlePicConfirm(date)
+                            setPickerVisible(false)
+                        }}
+                        onCancel={() => {
+                            setPickerVisible(false)
+                        }}
+                    />
+                </SafeAreaView>
+            </ImageBackground>
+        </View>
     )
 }

@@ -2,7 +2,11 @@ import { View, Text, useWindowDimensions } from 'react-native'
 import { useEffect, useState } from 'react'
 import { getMonday } from '../utils/utils'
 import { useSelectedDateStore } from '../../state/selectedDateStore'
-import { updateWeekDataStore, weekDataStore } from '../../state/dbStore'
+import {
+    createTableStore,
+    updateWeekDataStore,
+    weekDataStore,
+} from '../../state/dbStore'
 import { BarChart } from 'react-native-gifted-charts'
 import dayjs from 'dayjs'
 
@@ -11,13 +15,14 @@ export const VerticalChart: React.FC = () => {
     const [spacing, setSpacing] = useState<number>(24)
     const { selectedDate, setSelectedDate } = useSelectedDateStore()
     const { weekData, setWeekData } = weekDataStore()
+    const { isCreate, setIsCreate } = createTableStore()
 
     const daysLabel = (): string[] => {
-        const mondayString = getMonday(selectedDate)
-        const monday = dayjs(mondayString)
+        const monday = getMonday(selectedDate)
+        const mondayDate = dayjs(monday)
         const days = []
         for (let i = 0; i < 7; i++) {
-            const dayString = monday.add(i, 'day').format('D')
+            const dayString = mondayDate.add(i, 'day').format('D')
             days.push(dayString)
         }
         return days
@@ -56,8 +61,10 @@ export const VerticalChart: React.FC = () => {
 
     useEffect(() => {
         setSpacing(windowWidth / 7 - 33)
-        updateWeekDataStore(selectedDate)
-    }, [selectedDate])
+        if (isCreate) {
+            updateWeekDataStore(selectedDate)
+        }
+    }, [selectedDate, isCreate])
 
     return (
         <View className="bg-white pt-4 pb-2 rounded-xl">

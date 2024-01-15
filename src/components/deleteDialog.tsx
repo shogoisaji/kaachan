@@ -6,8 +6,8 @@ import { Picker } from '@react-native-picker/picker'
 import { updateData as dataUpdate } from '../services/DatabaseService'
 import { tags, timeNumbers } from '../config/config'
 import {
-    updateAllRowStore,
     updateDbTotalsStore,
+    updateTriggerStore,
     updateWeekDataStore,
 } from '../../state/dbStore'
 import { useSelectedDateStore } from '../../state/selectedDateStore'
@@ -32,16 +32,18 @@ export const DeleteDialog: React.FC<Props> = ({
 }) => {
     const { selectedDate } = useSelectedDateStore()
     const { momState, setMomState } = useMomStateStore()
+    const { update, setUpdate } = updateTriggerStore()
+
     const handleCancel = () => {
         setVisible(false)
     }
     const handleConfirm = () => {
         deleteData(data.id)
-        onDelete(true)
-        updateAllRowStore()
+        setUpdate(!update)
         updateDbTotalsStore(selectedDate)
         updateWeekDataStore(selectedDate)
         getMomState(setMomState)
+        onDelete(true)
         setVisible(false)
     }
     return (

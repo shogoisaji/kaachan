@@ -3,27 +3,28 @@ import { View, Text } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import { useSelectedDateStore } from '../../state/selectedDateStore'
 import dayjs from 'dayjs'
+import LinearGradient from 'react-native-linear-gradient'
 
 export const DateController: React.FC = () => {
     const { selectedDate, setSelectedDate } = useSelectedDateStore()
 
     const nextWeek = () => {
         const newDate = dayjs(selectedDate).add(7, 'day')
-        setSelectedDate(newDate.format())
+        setSelectedDate(newDate.format().slice(0, 19))
     }
 
     const prevWeek = () => {
         const newDate = dayjs(selectedDate).add(-7, 'day')
-        setSelectedDate(newDate.format())
+        setSelectedDate(newDate.format().slice(0, 19))
     }
     const nextMonth = () => {
         const newDate = dayjs(selectedDate).add(1, 'month')
-        setSelectedDate(newDate.format())
+        setSelectedDate(newDate.format().slice(0, 19))
     }
 
     const prevMonth = () => {
         const newDate = dayjs(selectedDate).add(-1, 'month')
-        setSelectedDate(newDate.format())
+        setSelectedDate(newDate.format().slice(0, 19))
     }
 
     const setYear = dayjs(selectedDate).format('YYYY')

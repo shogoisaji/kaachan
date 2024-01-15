@@ -1,5 +1,5 @@
 import { useMomStateStore } from '../../state/momStateStore'
-import { fetchSevenDaysData } from '../services/DatabaseService'
+import { fetchAllData, fetchSevenDaysData } from '../services/DatabaseService'
 
 export const getMomState = async (
     setMomStateStore: (state: string) => void
@@ -9,7 +9,18 @@ export const getMomState = async (
     setMomStateStore(state)
 }
 
+const checkFirst = async () => {
+    const allFetch = await fetchAllData()
+    if (allFetch.length === 0) {
+        return true
+    }
+}
+
 export const checkMomState = async (): Promise<string> => {
+    const first = await checkFirst()
+    if (first) {
+        return 'normal'
+    }
     const sevenDaysData = await fetchSevenDaysData()
     const consecutiveData = {
         isGood: false,

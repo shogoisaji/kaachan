@@ -4,40 +4,49 @@ import {
     Text,
     useWindowDimensions,
     FlatList,
+    ImageBackground,
 } from 'react-native'
-import { DataList } from '../components/dataList'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import {
-    NativeStackNavigationProp,
-    NativeStackScreenProps,
-} from '@react-navigation/native-stack'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../routes/route'
-import { useContext, useEffect, useState } from 'react'
-import { fetchAllData } from '../services/DatabaseService'
+import { useEffect, useState } from 'react'
 import { Icon } from '@rneui/themed'
-import { AllRowStore, updateAllRowStore } from '../../state/dbStore'
+import { updateTriggerStore } from '../../state/dbStore'
+import dayjs from 'dayjs'
+import { fetchAllData } from '../services/DatabaseService'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'HistoryScreen'>
 
 export const HistoryScreen: React.FC<Props> = ({ navigation }) => {
-    const { allRow, setAllRow } = AllRowStore()
+    const [loading, setLoading] = useState(true)
+    const [allRowData, setAllRowData] = useState<SaveDataTypes[]>([])
+    const { update, setUpdate } = updateTriggerStore()
     const windowHeight = useWindowDimensions().height
-    const [dataList, setDataList] = useState([])
     useEffect(() => {
-        updateAllRowStore()
-    }, [])
-    const items = allRow.map((item: SaveDataTypes, index: number) => {
+        let isMounted = true
+        const getRowData = async () => {
+            setLoading(true)
+            const data = await fetchAllData()
+            if (isMounted) {
+                setAllRowData(data)
+                setLoading(false)
+            }
+        }
+        getRowData()
+        return () => {
+            isMounted = false
+        }
+    }, [update])
+    const items = allRowData.map((item: SaveDataTypes, index: number) => {
+        if (loading) return <View className="flex-1 bg-custom-lightblue" />
         return (
             <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={() =>
                     navigation.navigate('Detail', { saveData: item })
                 }
             >
-                <View
-                    className={`flex flex-row w-auto h-20 justify-between items-center rounded-2xl px-4 my-1 mx-2 bg-custom-blue ${
-                        index == 0 ? 'mt-4' : 'mt-1'
-                    }`}
-                >
+                <View className="flex-1 flex-row justify-between items-center rounded-2xl  shadow shadow-blue-900 px-4 py-2 mx-4 my-2 bg-custom-blue">
                     <View className="flex flex-row items-center justify-start">
                         <View className="pr-5 pl-2">
                             <Icon
@@ -47,7 +56,7 @@ export const HistoryScreen: React.FC<Props> = ({ navigation }) => {
                                 size={30}
                             />
                         </View>
-                        <View className="flex flex-col justify-start w-52">
+                        <View className="flex flex-col justify-start w-44">
                             <Text
                                 className="text-xl font-bold"
                                 numberOfLines={1}
@@ -56,43 +65,41 @@ export const HistoryScreen: React.FC<Props> = ({ navigation }) => {
                                 {item.title}
                             </Text>
                             <Text className="text-lg">
-                                {new Date(item.createdAt).toLocaleDateString(
-                                    'ja-JP',
-                                    {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                    }
-                                )}
+                                {dayjs(item.createdAt).format('YYYY/MM/DD')}
                             </Text>
                         </View>
                     </View>
-                    <Text className="text-2xl w-16">
+                    <Text className="text-3xl font-bold text-white">
                         {item.time.toFixed(1)} h
                     </Text>
                 </View>
-                <View
-                    className={`
-                    ${index == dataList.length - 1 ? 'h-24' : 'h-0'}
-                    `}
-                ></View>
             </TouchableOpacity>
         )
     })
     return (
-        <SafeAreaView className="flex-1 bg-custom-lightblue">
-            <View className="flex flex-row justify-between items-center mt-2">
-                <View className="h-1 w-32 bg-custom-darkblue" />
-                <Text className="text-2xl font-bold text-custom-darkblue">
-                    History
-                </Text>
-                <View className="h-1 w-32 bg-custom-darkblue" />
-            </View>
-            <View style={{ height: windowHeight - 96 }}>
-                <View className="h-auto">
-                    <FlatList data={items} renderItem={({ item }) => item} />
-                </View>
-            </View>
-        </SafeAreaView>
+        <View className="flex-1 bg-custom-lightblue">
+            <ImageBackground
+                source={require('../../assets/bg.png')}
+                style={{ width: '100%', height: '100%' }}
+            >
+                <SafeAreaView className="flex-1">
+                    <View className="flex flex-row justify-between items-center mt-2">
+                        <View className="h-1 w-32 bg-custom-darkblue" />
+                        <Text className="text-2xl font-bold text-custom-darkblue">
+                            History
+                        </Text>
+                        <View className="h-1 w-32 bg-custom-darkblue" />
+                    </View>
+                    <View style={{ height: windowHeight - 96 }}>
+                        <View className="flex-1 py-4">
+                            <FlatList
+                                data={items}
+                                renderItem={({ item }) => item}
+                            />
+                        </View>
+                    </View>
+                </SafeAreaView>
+            </ImageBackground>
+        </View>
     )
 }
