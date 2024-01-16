@@ -1,24 +1,29 @@
 {
-  "cli": {
-    "version": ">= 6.0.0",
-    "promptToConfigurePushNotifications": false
-  },
-  "build": {
-    "development": {
-      "distribution": "internal",
-      "android": {
-        "gradleCommand": ":app:assembleDebug"
-      },
-      "ios": {
-        "buildConfiguration": "Debug"
-      }
+    "cli": {
+        "version": ">= 6.0.0",
+        "appVersionSource": "local",
+        "promptToConfigurePushNotifications": false
     },
-    "preview": {
-      "distribution": "internal"
+    "build": {
+        "development": {
+            "distribution": "internal",
+            "android": {
+                "gradleCommand": ":app:assembleDebug"
+            },
+            "ios": {
+                "buildConfiguration": "Release"
+            }
+        },
+        "preview": {
+            "distribution": "internal"
+        },
+        "production": {
+            "autoIncrement": true
+        }
     },
-    "production": {}
-  },
-  "submit": {
-    "production": {}
-  }
+    "submit": {
+        "production": {
+            "autoManageCertificates": true
+        }
+    }
 }

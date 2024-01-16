@@ -1,26 +1,38 @@
 {
-    "expo": {
-        "name": "Kaachan",
-        "slug": "Kaachan",
-        "version": "1.0.0",
-        "assetBundlePatterns": ["**/*"],
-        "privacy": "unlisted",
-        "sdkVersion": "49.0.18",
-        "platforms": ["ios"],
-        "orientation": "portrait",
-        "primaryColor": "#9FC7FF",
-        "infoPlist": {
-            "UISupportedInterfaceOrientations": [
-                "UIInterfaceOrientationPortrait",
-                "UIInterfaceOrientationPortraitUpsideDown",
-                "UIInterfaceOrientationLandscapeLeft",
-                "UIInterfaceOrientationLandscapeRight"
-            ]
-        },
-        "extra": {
-            "eas": {
-                "projectId": "524526c3-ec99-4aed-ad30-9809e97dece4"
-            }
-        }
+  "expo": {
+    "name": "Kaachan",
+    "slug": "Kaachan",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "privacy": "unlisted",
+    "sdkVersion": "49.0.18",
+    "platforms": [
+      "ios"
+    ],
+    "orientation": "portrait",
+    "primaryColor": "#9FC7FF",
+    "infoPlist": {
+      "UISupportedInterfaceOrientations": [
+        "UIInterfaceOrientationPortrait",
+        "UIInterfaceOrientationPortraitUpsideDown",
+        "UIInterfaceOrientationLandscapeLeft",
+        "UIInterfaceOrientationLandscapeRight"
+      ]
+    },
+    "ios": {
+      "bundleIdentifier": "com.shogoisaji.kaachan",
+      "buildNumber": "6",
+      "usesIcloudStorage": true
+    },
+    "notification": {
+      "iosDisplayInForeground": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "524526c3-ec99-4aed-ad30-9809e97dece4"
+      }
     }
+  }
 }
