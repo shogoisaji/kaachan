@@ -15,11 +15,13 @@ const _handleAppStateChange = (nextAppState: string) => {
 
 const _registerLocalNotification = (registerDate: NotificationTimeTypes) => {
     const messages = [
-        '今日は勉強したんか〜?記録しときなさいよ！',
-        '今日はたくさん勉強したのかな？記録しておこうか',
-        '今日の勉強の記録をしましょう',
+        '今日は勉強したんか〜? 記録しときなさいよ！',
+        '今日はたくさん勉強したのかな？ 記録しておこうか',
+        '今日の勉強時間を記録しておこうか',
         '忘れずに今日の勉強結果を記録しておくこと',
-        '今日の勉強時間を記録しておくことを忘れないで',
+        '今日の勉強時間を記録しておきましょう',
+        '日々の習慣が大切だよ。記録を習慣にしよう',
+        '今日もいい日だ！勉強しよう！記録しよう！',
     ]
     const message = messages[Math.floor(Math.random() * messages.length)]
 
@@ -83,28 +85,3 @@ export const notificationUnregister = () => {
         appStateSubscription.remove()
     }
 }
-
-// export default {
-//     register: async () => {
-//         PushNotification.configure({
-//             onNotification: (notification) => {
-//                 notification.finish(PushNotificationIOS.FetchResult.NoData)
-//             },
-//             // popInitialNotification: true,
-//         })
-
-//         _registerLocalNotification()
-
-//         // AppState.addEventListener から返されるサブスクリプションを保持
-//         appStateSubscription = AppState.addEventListener(
-//             'change',
-//             _handleAppStateChange
-//         )
-//     },
-//     unregister: () => {
-//         // サブスクリプションを解除
-//         if (appStateSubscription) {
-//             appStateSubscription.remove()
-//         }
-//     },
-// }

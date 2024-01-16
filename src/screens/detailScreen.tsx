@@ -1,13 +1,9 @@
 import { View, Text, SafeAreaView, ImageBackground } from 'react-native'
-import { Icon, Input, Button } from '@rneui/base'
+import { Icon, Button } from '@rneui/base'
 import { RootStackParamList } from '../routes/route'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useState } from 'react'
 import moment from 'moment'
-import { Picker } from '@react-native-picker/picker'
-import { tags, timeNumbers } from '../config/config'
-import { deleteData } from '../services/DatabaseService'
-import { updateDbTotalsStore, updateWeekDataStore } from '../../state/dbStore'
 import { useSelectedDateStore } from '../../state/selectedDateStore'
 import { EditDialog } from '../components/editDialog'
 import { DeleteDialog } from '../components/deleteDialog'
@@ -18,12 +14,10 @@ export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
     const [editDialogVisible, setEditDialogVisible] = useState<boolean>(false)
     const [deleteDialogVisible, setDeleteDialogVisible] =
         useState<boolean>(false)
-    const { selectedDate } = useSelectedDateStore()
     const { saveData } = route.params
     const [timeNumber, setTimeNumber] = useState<number>(saveData.time)
     const [selectedTag, setSelectedTag] = useState<string>(saveData.tag)
     const [text, setText] = useState<string>(saveData.title)
-    const [textIsNull, setTextIsNull] = useState<boolean>(false)
 
     const handleUpdate = (data: SaveDataTypes) => {
         setText(data.title)
@@ -56,11 +50,11 @@ export const DetailScreen: React.FC<Props> = ({ route, navigation }) => {
                     onUpdate={handleUpdate}
                 />
                 <View className="flex flex-row justify-between items-center mt-2 mb-4">
-                    <View className="h-1 w-32 bg-custom-darkblue" />
-                    <Text className="text-2xl font-bold text-custom-darkblue">
+                    <View className="flex-1 h-1 bg-custom-darkblue" />
+                    <Text className="text-2xl font-bold text-custom-darkblue px-8">
                         Detail
                     </Text>
-                    <View className="h-1 w-32 bg-custom-darkblue" />
+                    <View className="flex-1 h-1 bg-custom-darkblue" />
                 </View>
                 <View className="m-8">
                     <View className="flex-row justify-center p-4 shadow shadow-blue-800 bg-custom-blue rounded-xl">

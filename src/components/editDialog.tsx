@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Dialog from 'react-native-dialog'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import { Icon, Input } from '@rneui/themed'
 import { Picker } from '@react-native-picker/picker'
 import { updateData as dataUpdate } from '../services/DatabaseService'

@@ -1,4 +1,3 @@
-import { useMomStateStore } from '../../state/momStateStore'
 import { fetchAllData, fetchSevenDaysData } from '../services/DatabaseService'
 
 export const getMomState = async (
@@ -15,7 +14,13 @@ const checkFirst = async () => {
         return true
     }
 }
-
+//
+// good 5~  happy2
+// good 3~4 happy1
+//   any    normal
+// bad  3~4 angry1
+// bad  5~  angry2
+//
 export const checkMomState = async (): Promise<string> => {
     const first = await checkFirst()
     if (first) {
@@ -46,7 +51,7 @@ export const checkMomState = async (): Promise<string> => {
         }
     }
     if (consecutiveData.isGood) {
-        if (consecutiveData.days > 5) {
+        if (consecutiveData.days > 4) {
             return 'happy2'
         } else if (consecutiveData.days > 2) {
             return 'happy1'
@@ -54,9 +59,9 @@ export const checkMomState = async (): Promise<string> => {
             return 'normal'
         }
     } else {
-        if (consecutiveData.days > 3) {
+        if (consecutiveData.days > 4) {
             return 'angry2'
-        } else if (consecutiveData.days > 1) {
+        } else if (consecutiveData.days > 2) {
             return 'angry1'
         } else {
             return 'normal'

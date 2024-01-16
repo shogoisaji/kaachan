@@ -9,11 +9,13 @@
         "platforms": ["ios"],
         "orientation": "portrait",
         "primaryColor": "#9FC7FF",
-        "icon": "./assets/icon.png",
-        "splash": {
-            "image": "./assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#9FC7FF"
+        "infoPlist": {
+            "UISupportedInterfaceOrientations": [
+                "UIInterfaceOrientationPortrait",
+                "UIInterfaceOrientationPortraitUpsideDown",
+                "UIInterfaceOrientationLandscapeLeft",
+                "UIInterfaceOrientationLandscapeRight"
+            ]
         },
         "extra": {
             "eas": {

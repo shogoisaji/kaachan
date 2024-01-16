@@ -1,10 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Dialog from 'react-native-dialog'
-import { View, Text } from 'react-native'
-import { Icon, Input } from '@rneui/themed'
-import { Picker } from '@react-native-picker/picker'
-import { updateData as dataUpdate } from '../services/DatabaseService'
-import { tags, timeNumbers } from '../config/config'
+import { View } from 'react-native'
 import {
     updateDbTotalsStore,
     updateTriggerStore,
@@ -12,8 +8,6 @@ import {
 } from '../../state/dbStore'
 import { useSelectedDateStore } from '../../state/selectedDateStore'
 import { deleteData } from '../services/DatabaseService'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../routes/route'
 import { getMomState } from '../utils/momState'
 import { useMomStateStore } from '../../state/momStateStore'
 

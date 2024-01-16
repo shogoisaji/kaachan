@@ -34,8 +34,7 @@ export const insertData = (
 ): Promise<string> => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
-            const createdAt = '2024-01-14T16:08:15' //2024-01-10T16:08:15
-            // const createdAt = currentDateString() //2024-01-10T16:08:15
+            const createdAt = currentDateString() //2024-01-10T16:08:15
             tx.executeSql(
                 'INSERT INTO MyTable (title, time, tag, createdAt) VALUES (?, ?, ?, ?);',
                 [title, time, tag, createdAt],
@@ -60,7 +59,7 @@ export const fetchSevenDaysData = (): Promise<number[]> => {
     let promises: Promise<number>[] = []
     for (let i = 0; i < 7; i++) {
         const targetDate = dayjs().subtract(i, 'day')
-        const targetDateString = targetDate.toISOString()
+        const targetDateString = targetDate.format('YYYY-MM-DD')
         promises.push(
             new Promise((resolve, reject) => {
                 db.transaction((tx) => {

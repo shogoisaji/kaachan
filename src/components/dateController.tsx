@@ -3,7 +3,6 @@ import { View, Text } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import { useSelectedDateStore } from '../../state/selectedDateStore'
 import dayjs from 'dayjs'
-import LinearGradient from 'react-native-linear-gradient'
 
 export const DateController: React.FC = () => {
     const { selectedDate, setSelectedDate } = useSelectedDateStore()

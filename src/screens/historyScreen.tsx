@@ -18,6 +18,7 @@ import { fetchAllData } from '../services/DatabaseService'
 type Props = NativeStackScreenProps<RootStackParamList, 'HistoryScreen'>
 
 export const HistoryScreen: React.FC<Props> = ({ navigation }) => {
+    const windowWidth = useWindowDimensions().width
     const [loading, setLoading] = useState(true)
     const [allRowData, setAllRowData] = useState<SaveDataTypes[]>([])
     const { update, setUpdate } = updateTriggerStore()
@@ -40,40 +41,42 @@ export const HistoryScreen: React.FC<Props> = ({ navigation }) => {
     const items = allRowData.map((item: SaveDataTypes, index: number) => {
         if (loading) return <View className="flex-1 bg-custom-lightblue" />
         return (
-            <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() =>
-                    navigation.navigate('Detail', { saveData: item })
-                }
-            >
-                <View className="flex-1 flex-row justify-between items-center rounded-2xl  shadow shadow-blue-900 px-4 py-2 mx-4 my-2 bg-custom-blue">
-                    <View className="flex flex-row items-center justify-start">
-                        <View className="pr-5 pl-2">
-                            <Icon
-                                name={item.tag}
-                                type="font-awesome-5"
-                                color="white"
-                                size={30}
-                            />
+            <View className={`${windowWidth > 800 ? 'px-60' : 'px-0'}`}>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() =>
+                        navigation.navigate('Detail', { saveData: item })
+                    }
+                >
+                    <View className="flex-1 flex-row justify-between items-center rounded-2xl  shadow shadow-blue-900 px-4 py-2 mx-4 my-2 bg-custom-blue">
+                        <View className="flex flex-row items-center justify-start">
+                            <View className="pr-5 pl-2">
+                                <Icon
+                                    name={item.tag}
+                                    type="font-awesome-5"
+                                    color="white"
+                                    size={30}
+                                />
+                            </View>
+                            <View className="flex flex-col justify-start w-44">
+                                <Text
+                                    className="text-xl font-bold"
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                >
+                                    {item.title}
+                                </Text>
+                                <Text className="text-lg">
+                                    {dayjs(item.createdAt).format('YYYY/MM/DD')}
+                                </Text>
+                            </View>
                         </View>
-                        <View className="flex flex-col justify-start w-44">
-                            <Text
-                                className="text-xl font-bold"
-                                numberOfLines={1}
-                                ellipsizeMode="tail"
-                            >
-                                {item.title}
-                            </Text>
-                            <Text className="text-lg">
-                                {dayjs(item.createdAt).format('YYYY/MM/DD')}
-                            </Text>
-                        </View>
+                        <Text className="text-3xl font-bold text-white">
+                            {item.time.toFixed(1)} h
+                        </Text>
                     </View>
-                    <Text className="text-3xl font-bold text-white">
-                        {item.time.toFixed(1)} h
-                    </Text>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </View>
         )
     })
     return (
@@ -84,11 +87,11 @@ export const HistoryScreen: React.FC<Props> = ({ navigation }) => {
             >
                 <SafeAreaView className="flex-1">
                     <View className="flex flex-row justify-between items-center mt-2">
-                        <View className="h-1 w-32 bg-custom-darkblue" />
-                        <Text className="text-2xl font-bold text-custom-darkblue">
+                        <View className="flex-1 h-1 bg-custom-darkblue" />
+                        <Text className="text-2xl font-bold text-custom-darkblue px-8">
                             History
                         </Text>
-                        <View className="h-1 w-32 bg-custom-darkblue" />
+                        <View className="flex-1 h-1 bg-custom-darkblue" />
                     </View>
                     <View style={{ height: windowHeight - 96 }}>
                         <View className="flex-1 py-4">

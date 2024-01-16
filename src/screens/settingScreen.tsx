@@ -5,8 +5,8 @@ import {
     Switch,
     TouchableOpacity,
     ImageBackground,
+    useWindowDimensions,
 } from 'react-native'
-import { Button } from '@rneui/base'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
     NotificationTimeTypes,
@@ -18,7 +18,7 @@ import { useNotificationTimeStore } from '../../state/notificationTimeState'
 import { useNoticeStateStore } from '../../state/noticeState'
 
 export const SettingScreen: React.FC = () => {
-    // const [notice, setNotice] = useState<boolean>(false)
+    const windowWidth = useWindowDimensions().width
     const { noticeState, setNoticeState } = useNoticeStateStore()
     const { notificationTime, setNotificationTime } = useNotificationTimeStore()
     const [selectedTime, setSelectedTime] = useState(new Date())
@@ -54,71 +54,73 @@ export const SettingScreen: React.FC = () => {
             >
                 <SafeAreaView className="flex-1">
                     <View className="flex flex-row justify-between items-center mt-2">
-                        <View className="h-1 w-32 bg-custom-darkblue" />
-                        <Text className="text-2xl font-bold text-custom-darkblue">
-                            Settings
+                        <View className="flex-1 h-1 bg-custom-darkblue" />
+                        <Text className="text-2xl font-bold text-custom-darkblue px-8">
+                            Setting
                         </Text>
-                        <View className="h-1 w-32 bg-custom-darkblue" />
+                        <View className="flex-1 h-1 bg-custom-darkblue" />
                     </View>
-                    <View className="m-8">
-                        <View className="flex-row justify-between items-center py-4 pl-6 pr-4 mb-6 shadow shadow-blue-800 bg-custom-blue rounded-xl">
-                            <Text className="text-3xl text-white font-bold">
-                                通知
-                            </Text>
-                            <Switch
-                                trackColor={{
-                                    false: '#767577',
-                                    true: '#FF6A8C',
-                                }}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch}
-                                value={noticeState}
-                            />
+                    <View className={`${windowWidth > 800 ? 'px-60' : 'px-0'}`}>
+                        <View className="m-8">
+                            <View className="flex-row justify-between items-center py-4 pl-6 pr-4 mb-6 shadow shadow-blue-800 bg-custom-blue rounded-xl">
+                                <Text className="text-3xl text-white font-bold">
+                                    通知
+                                </Text>
+                                <Switch
+                                    trackColor={{
+                                        false: '#767577',
+                                        true: '#FF6A8C',
+                                    }}
+                                    ios_backgroundColor="#3e3e3e"
+                                    onValueChange={toggleSwitch}
+                                    value={noticeState}
+                                />
+                            </View>
+                            <View className="flex-row h-auto items-center justify-between py-4 pl-6 pr-4 shadow shadow-blue-800 bg-custom-blue rounded-xl">
+                                <Text className="text-3xl text-white font-bold">
+                                    通知時間
+                                </Text>
+                                <TouchableOpacity
+                                    activeOpacity={0.8}
+                                    onPress={() => {
+                                        if (!noticeState) return
+                                        setPickerVisible(true)
+                                    }}
+                                >
+                                    <View className="bg-white py-2 px-4 rounded-lg justify-center items-center">
+                                        <Text
+                                            className={`${
+                                                noticeState
+                                                    ? 'text-black'
+                                                    : 'text-gray-300'
+                                            } text-4xl font-bold`}
+                                        >
+                                            {notificationTime.hour
+                                                .toString()
+                                                .padStart(2, '0')}
+                                            :
+                                            {notificationTime.minuit
+                                                .toString()
+                                                .padStart(2, '0')}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                        <View className="flex-row h-auto items-center justify-between py-4 pl-6 pr-4 shadow shadow-blue-800 bg-custom-blue rounded-xl">
-                            <Text className="text-3xl text-white font-bold">
-                                通知時間
-                            </Text>
-                            <TouchableOpacity
-                                activeOpacity={0.8}
-                                onPress={() => {
-                                    if (!noticeState) return
-                                    setPickerVisible(true)
-                                }}
-                            >
-                                <View className="bg-white py-2 px-4 rounded-lg justify-center items-center">
-                                    <Text
-                                        className={`${
-                                            noticeState
-                                                ? 'text-black'
-                                                : 'text-gray-300'
-                                        } text-4xl font-bold`}
-                                    >
-                                        {notificationTime.hour
-                                            .toString()
-                                            .padStart(2, '0')}
-                                        :
-                                        {notificationTime.minuit
-                                            .toString()
-                                            .padStart(2, '0')}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
+                        <DatePicker
+                            modal
+                            mode="time"
+                            open={pickerVisible}
+                            date={selectedTime}
+                            onConfirm={(date) => {
+                                handlePicConfirm(date)
+                                setPickerVisible(false)
+                            }}
+                            onCancel={() => {
+                                setPickerVisible(false)
+                            }}
+                        />
                     </View>
-                    <DatePicker
-                        modal
-                        mode="time"
-                        open={pickerVisible}
-                        date={selectedTime}
-                        onConfirm={(date) => {
-                            handlePicConfirm(date)
-                            setPickerVisible(false)
-                        }}
-                        onCancel={() => {
-                            setPickerVisible(false)
-                        }}
-                    />
                 </SafeAreaView>
             </ImageBackground>
         </View>

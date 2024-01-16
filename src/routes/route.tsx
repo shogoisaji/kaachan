@@ -6,7 +6,6 @@ import { HistoryScreen } from '../screens/historyScreen'
 import { SettingScreen } from '../screens/settingScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { FontAwesome } from '@expo/vector-icons'
-import { View } from 'react-native'
 
 export type RootStackParamList = {
     HomeScreen: undefined

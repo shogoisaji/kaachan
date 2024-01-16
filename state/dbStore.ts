@@ -1,9 +1,5 @@
 import { create } from 'zustand'
-import {
-    fetchAllData,
-    fetchTotalsData,
-    fetchWeekData,
-} from '../src/services/DatabaseService'
+import { fetchTotalsData, fetchWeekData } from '../src/services/DatabaseService'
 
 interface DbTotals {
     dbTotals: { day: number; week: number; month: number }
@@ -69,7 +65,6 @@ interface CreateTableType {
 export const createTableStore = create<CreateTableType>((set) => ({
     isCreate: false,
     setIsCreate: (boolean: boolean) => {
-        console.log('setIsCreate', boolean)
         return set({ isCreate: boolean })
     },
 }))
