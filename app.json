@@ -2,7 +2,7 @@
   "expo": {
     "name": "Kaachan",
     "slug": "Kaachan",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -23,7 +23,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.shogoisaji.kaachan",
-      "buildNumber": "6",
+      "buildNumber": "8",
       "usesIcloudStorage": true
     },
     "notification": {

@@ -21,9 +21,5 @@
             "autoIncrement": true
         }
     },
-    "submit": {
-        "production": {
-            "autoManageCertificates": true
-        }
-    }
+    "submit": {}
 }
