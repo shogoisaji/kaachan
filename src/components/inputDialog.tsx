@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Dialog from 'react-native-dialog'
-import { TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity, View, Appearance } from 'react-native'
 import { Icon, Input } from '@rneui/themed'
 import { Picker } from '@react-native-picker/picker'
 import { insertData } from '../services/DatabaseService'
@@ -16,6 +16,8 @@ import { getMomState } from '../utils/momState'
 import { useMomStateStore } from '../../state/momStateStore'
 
 export const InputDialog = () => {
+    const colorScheme = Appearance.getColorScheme()
+    const textColor = colorScheme === 'dark' ? 'white' : 'black'
     const { selectedDate, setSelectedDate } = useSelectedDateStore()
     const { momState, setMomState } = useMomStateStore()
     const [visible, setVisible] = useState(false)
@@ -72,6 +74,7 @@ export const InputDialog = () => {
                         borderColor: textIsNull ? 'red' : 'lightgray',
                         borderRadius: 10,
                         padding: 10,
+                        color: textColor,
                     }}
                     inputContainerStyle={{ borderBottomWidth: 0 }}
                     placeholder="例) 英語の勉強"
@@ -107,6 +110,7 @@ export const InputDialog = () => {
                                     key={value}
                                     label={value + ' h'}
                                     value={value}
+                                    color={textColor}
                                 />
                             ))}
                         </Picker>
