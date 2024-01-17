@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Dialog from 'react-native-dialog'
-import { View } from 'react-native'
+import { View, Appearance } from 'react-native'
 import { Icon, Input } from '@rneui/themed'
 import { Picker } from '@react-native-picker/picker'
 import { updateData as dataUpdate } from '../services/DatabaseService'
@@ -25,6 +25,8 @@ export const EditDialog: React.FC<Props> = ({
     setVisible,
     onUpdate,
 }) => {
+    const colorScheme = Appearance.getColorScheme()
+    const textColor = colorScheme === 'dark' ? 'white' : 'black'
     const { selectedDate, setSelectedDate } = useSelectedDateStore()
     const [textIsNull, setTextIsNull] = useState<boolean>(false)
     const [text, setText] = useState<string>(initialData.title)
@@ -74,6 +76,7 @@ export const EditDialog: React.FC<Props> = ({
                         borderColor: textIsNull ? 'red' : 'lightgray',
                         borderRadius: 10,
                         padding: 10,
+                        color: textColor,
                     }}
                     inputContainerStyle={{ borderBottomWidth: 0 }}
                     placeholder="例) 英語の勉強"
@@ -109,6 +112,7 @@ export const EditDialog: React.FC<Props> = ({
                                     key={value}
                                     label={`${value} h`}
                                     value={value}
+                                    color={textColor}
                                 />
                             ))}
                         </Picker>
